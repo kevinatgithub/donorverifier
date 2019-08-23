@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/news"
+            android:icon="@drawable/ic_news"
+            android:title="News and Updates"></item>
+        <item android:id="@+id/verifier"
+            android:icon="@drawable/ic_verifier"
+            android:title="Donor Verifier"></item>
+        <item android:id="@+id/sync"
+            android:icon="@drawable/ic_sync"
+            android:title="Sync with Server"></item>
+        <item android:id="@+id/statistics"
+            android:icon="@drawable/ic_statistics"
+            android:title="Statistics"></item>
+        <item android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings"></item>
+        <item android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout"></item>
+    </group>
+</menu>
