@@ -1,6 +1,10 @@
 package app.kevin.dev.donorverifier.models;
 
-public class Donor {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Donor extends RealmObject {
+    @PrimaryKey
     private String seqno;
     private String donor_id;
     private String fname;
@@ -14,22 +18,6 @@ public class Donor {
     private String home_city;
     private String home_region;
     private String donation_stat;
-
-    public Donor(String seqno, String donor_id, String fname, String mname, String lname, String gender, String bdate, String home_no_st_blk, String home_brgy, String home_prov, String home_city, String home_region, String donation_stat) {
-        this.seqno = seqno;
-        this.donor_id = donor_id;
-        this.fname = fname;
-        this.mname = mname;
-        this.lname = lname;
-        this.gender = gender;
-        this.bdate = bdate;
-        this.home_no_st_blk = home_no_st_blk;
-        this.home_brgy = home_brgy;
-        this.home_prov = home_prov;
-        this.home_city = home_city;
-        this.home_region = home_region;
-        this.donation_stat = donation_stat;
-    }
 
     public String getSeqno() {
         return seqno;

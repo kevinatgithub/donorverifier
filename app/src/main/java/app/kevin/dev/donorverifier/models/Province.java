@@ -1,15 +1,15 @@
 package app.kevin.dev.donorverifier.models;
 
-public class Province {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Province extends RealmObject {
+
     private String regcode;
+    @PrimaryKey
     private String provcode;
     private String provname;
 
-    public Province(String regcode, String provcode, String provname) {
-        this.regcode = regcode;
-        this.provcode = provcode;
-        this.provname = provname;
-    }
 
     public String getRegcode() {
         return regcode;

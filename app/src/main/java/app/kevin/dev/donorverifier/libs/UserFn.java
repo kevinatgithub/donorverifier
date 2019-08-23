@@ -6,11 +6,15 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import app.kevin.dev.donorverifier.models.Region;
+import io.realm.Realm;
 
 public class UserFn {
 
@@ -49,4 +53,21 @@ public class UserFn {
         Log.d("LOG MESSAGE",message);
     }
 
+    public static void clearDB(Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        });
+    }
+
+    public static JSONObject addParam(JSONObject request_body, String key, String val){
+        try {
+            request_body.put(key,UserFn.urlEncode(val));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return request_body;
+    }
 }
