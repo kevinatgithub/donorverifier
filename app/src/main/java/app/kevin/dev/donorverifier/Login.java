@@ -14,12 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
 import app.kevin.dev.donorverifier.libs.Api;
+import app.kevin.dev.donorverifier.libs.ConnectivityManager;
 import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
+import app.kevin.dev.donorverifier.models.ApiErrorCallback;
+import app.kevin.dev.donorverifier.models.Callback;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
 import app.kevin.dev.donorverifier.models.User;
 import app.kevin.dev.donorverifier.models.api_response.LoginResponse;
@@ -53,6 +57,8 @@ public class Login extends AppCompatActivity {
                 validateForm();
             }
         });
+
+        checkNetwork();
     }
 
     private void validateForm() {
@@ -70,6 +76,15 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    private void checkNetwork(){
+        ConnectivityManager.checkConnection(this, new Callback() {
+            @Override
+            public void execute() {
+
+            }
+        });
+    }
+
     private void attemptLogin(String username, String password) {
         String url = UserFn.url(UserFn.API_LOGIN);
         JSONObject params = new JSONObject();
@@ -82,13 +97,18 @@ public class Login extends AppCompatActivity {
             public void execute(@Nullable JSONObject response) {
                 toggleLoading(false);
                 LoginResponse loginResponse = UserFn.gson.fromJson(response.toString(), LoginResponse.class);
-                if(loginResponse.getStatus().equals("ok")){
+                if (loginResponse.getStatus().equals("ok")) {
                     processLogin(loginResponse.getUser());
-                }else{
+                } else {
                     tilPassword.setError("Login failed, please check your username/password.");
                     txtUsername.setText("");
                     txtPassword.setText("");
                 }
+            }
+        }, new ApiErrorCallback() {
+            @Override
+            public void uponError(VolleyError error) {
+
             }
         });
     }

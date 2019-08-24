@@ -1,6 +1,9 @@
 package app.kevin.dev.donorverifier.libs;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -13,8 +16,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import app.kevin.dev.donorverifier.Download;
+import app.kevin.dev.donorverifier.models.Callback;
+import app.kevin.dev.donorverifier.models.DownloadState;
 import app.kevin.dev.donorverifier.models.Region;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class UserFn {
 
@@ -69,5 +76,73 @@ public class UserFn {
             e.printStackTrace();
         }
         return request_body;
+    }
+
+    public static void cantConnect(Context context){
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Can't connect to server");
+        alertDialog.setMessage("Please check your connection and try again");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        alertDialog.show();
+    }
+
+    public static void confirm(Context context, String title, String message, final Callback onYes){
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        onYes.execute();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    public static Realm getRealmInstance(Context context){
+        Realm.init(context);
+        RealmConfiguration config = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        return Realm.getDefaultInstance();
+    }
+
+    public static DownloadState getDownloadState(Context context){
+        String str = Session.get(context,"downloadState",null);
+        DownloadState state = new DownloadState();
+        if(str != null){
+            state = gson.fromJson(str, DownloadState.class);
+        }
+
+        return state;
+    }
+
+    public static String convertToTitleCaseIteratingChars(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        StringBuilder converted = new StringBuilder();
+
+        boolean convertNext = true;
+        for (char ch : text.toCharArray()) {
+            if (Character.isSpaceChar(ch)) {
+                convertNext = true;
+            } else if (convertNext) {
+                ch = Character.toTitleCase(ch);
+                convertNext = false;
+            } else {
+                ch = Character.toLowerCase(ch);
+            }
+            converted.append(ch);
+        }
+
+        return converted.toString();
     }
 }

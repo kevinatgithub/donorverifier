@@ -17,15 +17,21 @@ public class UpdateCountResponse {
         return data;
     }
 
-    class DataResponse{
+    public class DataResponse{
         private int count;
-
-        public DataResponse(int count) {
-            this.count = count;
-        }
+        private String regcode;
+        private int barangays;
 
         public int getCount() {
             return count;
+        }
+
+        public String getRegcode() {
+            return regcode;
+        }
+
+        public int getBarangays() {
+            return barangays;
         }
     }
 }

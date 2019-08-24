@@ -39,7 +39,7 @@ public class Api {
                             CALLBACK.execute(response);
                         }
                     }
-                }, errorListener(null))
+                }, errorListener(null,ACTIVITY))
         );
     }
 
@@ -53,7 +53,7 @@ public class Api {
                             CALLBACK.execute(response);
                         }
                     }
-                }, errorListener(ERROR_CALLBACK))
+                }, errorListener(ERROR_CALLBACK, ACTIVITY))
         );
     }
 
@@ -67,7 +67,7 @@ public class Api {
                             CALLBACK.execute(response);
                         }
                     }
-                }, errorListener(ERROR_CALLBACK))
+                }, errorListener(ERROR_CALLBACK, ACTIVITY))
         );
     }
 
@@ -81,18 +81,19 @@ public class Api {
                             CALLBACK.execute(response);
                         }
                     }
-                }, errorListener(null))
+                }, errorListener(null, ACTIVITY))
         );
     }
 
-    private static Response.ErrorListener errorListener(final ApiErrorCallback ERROR_CALLBACK){
+    private static Response.ErrorListener errorListener(final ApiErrorCallback ERROR_CALLBACK, final Activity ACTIVITY){
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if(ERROR_CALLBACK != null){
                     ERROR_CALLBACK.uponError(error);
                 }else{
-                    Log.e("API CALL ERROR",error.getMessage());
+                    UserFn.cantConnect(ACTIVITY);
+                    Log.e("CANT_CONNECT",error.getMessage());
                 }
             }
         };

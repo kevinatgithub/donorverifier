@@ -1,19 +1,15 @@
 package app.kevin.dev.donorverifier.models;
 
-public class Barangay {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Barangay extends RealmObject{
     private String regcode;
     private String provcode;
     private String citycode;
+    @PrimaryKey
     private String bgycode;
     private String bgyname;
-
-    public Barangay(String regcode, String provcode, String citycode, String bgycode, String bgyname) {
-        this.regcode = regcode;
-        this.provcode = provcode;
-        this.citycode = citycode;
-        this.bgycode = bgycode;
-        this.bgyname = bgyname;
-    }
 
     public String getRegcode() {
         return regcode;

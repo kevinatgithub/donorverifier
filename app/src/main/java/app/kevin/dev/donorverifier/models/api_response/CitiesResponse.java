@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import app.kevin.dev.donorverifier.models.City;
 
-public class CityResponse {
+public class CitiesResponse {
     private String status;
     private ArrayList<City> data;
 
-    public CityResponse(String status, ArrayList<City> data) {
+    public CitiesResponse(String status, ArrayList<City> data) {
         this.status = status;
         this.data = data;
     }
