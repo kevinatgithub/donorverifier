@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,6 +15,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import app.kevin.dev.donorverifier.adapters.DonorAdapter;
+import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewAdapter;
+import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewClickListener;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Donor;
 import io.realm.Case;
@@ -22,7 +26,9 @@ import io.realm.RealmResults;
 
 public class DonorVerifier extends AppCompatActivity {
 
-    ListView resultList;
+//    ListView resultList;
+    RecyclerView resultList;
+    RecyclerView.LayoutManager layoutManager;
     Button btnSearch;
     TextInputLayout tilFname;
     TextInputLayout tilLname;
@@ -37,14 +43,19 @@ public class DonorVerifier extends AppCompatActivity {
 
         AppDrawerItemClickListener.prepareAppDrawer(this);
         realm = UserFn.getRealmInstance(this);
+
         resultList = findViewById(R.id.donorList);
-        resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Donor donor = (Donor) resultList.getItemAtPosition(i);
-                gotoPreview(donor);
-            }
-        });
+        resultList.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        resultList.setLayoutManager(layoutManager);
+
+//        resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Donor donor = (Donor) resultList.getItemAtPosition(i);
+//                gotoPreview(donor);
+//            }
+//        });
         btnSearch = findViewById(R.id.btnSearch);
         tilFname = findViewById(R.id.tilFname);
         tilLname = findViewById(R.id.tilLname);
@@ -83,7 +94,13 @@ public class DonorVerifier extends AppCompatActivity {
 
         ArrayList<Donor> donors = new ArrayList<>();
         donors.addAll(realmResults);
-        DonorAdapter adapter = new DonorAdapter(this,donors);
+//        DonorAdapter adapter = new DonorAdapter(this,donors);
+        DonorRecyclerViewAdapter adapter = new DonorRecyclerViewAdapter(this, donors, new DonorRecyclerViewClickListener() {
+            @Override
+            public void onClick(Donor donor) {
+                gotoPreview(donor);
+            }
+        });
         resultList.setAdapter(adapter);
     }
 }

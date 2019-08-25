@@ -15,8 +15,6 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapter;
 import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapterCheckClickListener;
@@ -24,7 +22,6 @@ import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapterDownloadClickLi
 import app.kevin.dev.donorverifier.libs.Api;
 import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
-import app.kevin.dev.donorverifier.models.Callback;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
 import app.kevin.dev.donorverifier.models.City;
 import app.kevin.dev.donorverifier.models.DownloadState;
@@ -55,6 +52,9 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
         realm = Realm.getDefaultInstance();
 
         AppDrawerItemClickListener.prepareAppDrawer(this);
+
+        Region untagged = new Region("00","Region not set");
+        regions.add(untagged);
 
         cardViewInit = findViewById(R.id.card_view_init);
         btnDownloadInit = findViewById(R.id.btnDownloadInit);
@@ -165,6 +165,7 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
     public void onClick(Region region, View convertView, boolean isCheckButton) {
         final TextView donorCount = convertView.findViewById(R.id.donorCount);
         final TextView barangayCount = convertView.findViewById(R.id.barangayCount);
+        final TextView photoCount = convertView.findViewById(R.id.photoCount);
         final TextView donorsHidden = convertView.findViewById(R.id.donorsHidden);
         final TextView barangaysHidden = convertView.findViewById(R.id.barangaysHidden);
 
@@ -192,6 +193,7 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
                 if(countResponse.getStatus().equals("ok")){
                     UpdateCountResponse.DataResponse data = countResponse.getData();
                     donorCount.setText(String.valueOf(data.getCount()) + " Donors");
+                    photoCount.setText(String.valueOf(data.getWithPhoto() + " Photos"));
                     barangayCount.setText(String.valueOf(data.getBarangays()) + " Barangays");
                     donorsHidden.setText(String.valueOf(data.getCount()));
                     barangaysHidden.setText(String.valueOf(data.getBarangays()));
@@ -234,9 +236,10 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
             return;
         }
 
-        Intent intent = new Intent(this,RegionDownload.class);
+        Intent intent = new Intent(this,DownloadRegion.class);
         intent.putExtra("region",UserFn.gson.toJson(region));
         intent.putExtra("donors",data.getCount());
+        intent.putExtra("photos",data.getWithPhoto());
         intent.putExtra("barangays",data.getBarangays());
         startActivity(intent);
     }

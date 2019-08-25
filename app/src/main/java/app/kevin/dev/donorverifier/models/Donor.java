@@ -6,6 +6,8 @@ import io.realm.annotations.PrimaryKey;
 public class Donor extends RealmObject {
     @PrimaryKey
     private String seqno;
+    private String donor_photo;
+    private String barcode;
     private String donor_id;
     private String fname;
     private String mname;
@@ -25,6 +27,22 @@ public class Donor extends RealmObject {
 
     public void setSeqno(String seqno) {
         this.seqno = seqno;
+    }
+
+    public String getDonor_photo() {
+        return donor_photo;
+    }
+
+    public void setDonor_photo(String donor_photo) {
+        this.donor_photo = donor_photo;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getDonor_id() {

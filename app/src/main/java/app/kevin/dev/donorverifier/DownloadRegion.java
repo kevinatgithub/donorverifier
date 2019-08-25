@@ -19,14 +19,19 @@ import java.util.ArrayList;
 import app.kevin.dev.donorverifier.libs.Api;
 import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
+import app.kevin.dev.donorverifier.models.Barangay;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
 import app.kevin.dev.donorverifier.models.Donor;
 import app.kevin.dev.donorverifier.models.DownloadState;
 import app.kevin.dev.donorverifier.models.Region;
+import app.kevin.dev.donorverifier.models.api_response.BarangaysResponse;
+import app.kevin.dev.donorverifier.models.api_response.CallbackWithStringResponse;
+import app.kevin.dev.donorverifier.models.api_response.DonorPhotoResponse;
 import app.kevin.dev.donorverifier.models.api_response.UpdateResponse;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
-public class RegionDownload extends AppCompatActivity implements View.OnClickListener {
+public class DownloadRegion extends AppCompatActivity implements View.OnClickListener {
 
     Realm realm;
 
@@ -36,6 +41,7 @@ public class RegionDownload extends AppCompatActivity implements View.OnClickLis
     ProgressBar downloadProgress;
     Region region;
     int donors;
+    int photos;
     int barangays;
 
     @Override
@@ -58,9 +64,10 @@ public class RegionDownload extends AppCompatActivity implements View.OnClickLis
         String strRegion = intent.getStringExtra("region");
         region = UserFn.gson.fromJson(strRegion,Region.class);
         donors = intent.getIntExtra("donors",0);
+        photos = intent.getIntExtra("photos",0);
         barangays = intent.getIntExtra("barangays",0);
 
-        regionName.setText(region.getRegname() + "\n" + String.valueOf(donors) + " Donors\n" + String.valueOf(barangays) + " Barangays");
+        regionName.setText(region.getRegname() + "\n" + String.valueOf(donors) + " Donors\n"+ String.valueOf(photos) + " Photos\n"  + String.valueOf(barangays) + " Barangays");
         downloadProgress.setMax(donors);
         downloadProgress.setProgress(0);
 
@@ -78,6 +85,29 @@ public class RegionDownload extends AppCompatActivity implements View.OnClickLis
         downloadProgressText.setVisibility(View.VISIBLE);
         downloadProgress.setIndeterminate(true);
 
+        String url = UserFn.url(UserFn.API_BARANGAYS);
+        url = url.replace("{regcode}",region.getRegcode());
+        Api.call(this, url, new CallbackWithResponse() {
+            @Override
+            public void execute(@Nullable JSONObject response) {
+                BarangaysResponse barangaysResponse = UserFn.gson.fromJson(response.toString(),BarangaysResponse.class);
+                beginSavingBarangays(barangaysResponse.getData());
+            }
+        });
+
+    }
+
+    private void beginSavingBarangays(ArrayList<Barangay> data) {
+        downloadProgress.setIndeterminate(false);
+        realm.beginTransaction();
+        for(Barangay barangay: data){
+            realm.copyToRealmOrUpdate(barangay);
+        }
+        realm.commitTransaction();
+        commenceDonorDownload();
+    }
+
+    private void commenceDonorDownload() {
         DownloadState state = UserFn.getDownloadState(this);
         String last = "0";
         if(state.getRegions().size() > 0){
@@ -104,7 +134,7 @@ public class RegionDownload extends AppCompatActivity implements View.OnClickLis
 
     private String lastID = "0";
     private void beginSaving(ArrayList<Donor> data) {
-        downloadProgress.setIndeterminate(false);
+
         
         realm.beginTransaction();
         for(final Donor donor: data){
@@ -137,11 +167,31 @@ public class RegionDownload extends AppCompatActivity implements View.OnClickLis
 
 
         realm.commitTransaction();
+        commencePhotoDownload();
+    }
+
+    private void commencePhotoDownload() {
+        Toast.makeText(this, "Downloading photos", Toast.LENGTH_SHORT).show();
+        RealmResults<Donor> donors = realm.where(Donor.class).equalTo("donor_photo","photo").findAll();
+        for(final Donor donor:donors){
+            String url = UserFn.url(UserFn.API_DONOR_PHOTO);
+            url = url.replace("{seqno}",UserFn.urlEncode(donor.getSeqno()));
+            Api.getString(this, url, new CallbackWithStringResponse() {
+                @Override
+                public void execute(@Nullable String response) {
+                    realm.beginTransaction();
+                    donor.setDonor_photo(response);
+//                    realm.copyToRealmOrUpdate(donor);
+                    realm.commitTransaction();
+                }
+            });
+        }
+
         commenceSavingComplete();
     }
 
     private void commenceSavingComplete() {
-        Toast.makeText(this, "Download complete..", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Download complete", Toast.LENGTH_SHORT).show();
         DownloadState state = UserFn.getDownloadState(this);
         DownloadState.RegionState rs = new DownloadState.RegionState();
         for(DownloadState.RegionState rs2: state.getRegions()){

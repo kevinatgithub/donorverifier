@@ -38,7 +38,7 @@
         <activity android:name=".Download" />
         <activity android:name=".Upload" />
         <activity android:name=".DonorVerifier" />
-        <activity android:name=".RegionDownload" />
+        <activity android:name=".DownloadRegion" />
         <activity android:name=".DonorPreview" />
         <activity android:name=".DonorForm" />
         <activity android:name=".GeoList"></activity>

@@ -9,12 +9,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 import app.kevin.dev.donorverifier.models.ApiErrorCallback;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
+import app.kevin.dev.donorverifier.models.api_response.CallbackWithStringResponse;
 
 public class Api {
     private static Activity activity;
@@ -93,9 +98,44 @@ public class Api {
                     ERROR_CALLBACK.uponError(error);
                 }else{
                     UserFn.cantConnect(ACTIVITY);
-                    Log.e("CANT_CONNECT",error.getMessage());
+//                    Log.e("CANT_CONNECT",error.getMessage());
                 }
             }
         };
+    }
+
+    public static JSONObject callWait(String URL){
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
+        requestQueue.add(request);
+
+        try {
+            JSONObject response = future.get(); // this will block
+            return response;
+        } catch (InterruptedException e) {
+            Log.e("ERROR",e.getMessage());
+            // exception handling
+        } catch (ExecutionException e) {
+            Log.e("ERROR",e.getMessage());
+            // exception handling
+        }
+
+        return null;
+    }
+
+    public static void getString(Activity activity, String url, final CallbackWithStringResponse callback) {
+        StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.execute(response);
+            }
+        },errorListener(new ApiErrorCallback() {
+            @Override
+            public void uponError(VolleyError error) {
+                Log.e("error",error.getMessage());
+            }
+        }, activity));
+
+        requestQueue.add(strReq);
     }
 }

@@ -39,7 +39,7 @@ public class UserFn {
     public static String API_PROVINCES = "provinces";
     public static String API_CITIES = "cities";
     public static String API_BARANGAYS = "barangays/{regcode}";
-    public static String API_NEWS = "news/{max}";
+    public static String API_NEWS = "news";
     public static String API_UPLOAD = "upload";
     public static String API_UPLOAD_PHOTO = "uploadphoto";
 

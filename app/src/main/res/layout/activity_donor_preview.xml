@@ -16,7 +16,7 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            app:title="News and Announcement"
+            app:title="Donor Information"
             app:navigationIcon="@drawable/ic_back_w"
             app:titleTextColor="#ffffff" />
     </android.support.design.widget.AppBarLayout>
@@ -24,13 +24,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -49,11 +49,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/card_margin"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
                 android:elevation="3dp"
                 android:padding="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -64,18 +65,21 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp">
 
                     <ImageView
                         android:id="@+id/photo"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_width="0dp"
+                        android:layout_height="260dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@android:color/darker_gray"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/donorID"
                         card_view:srcCompat="@drawable/ic_photo" />
@@ -87,7 +91,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/donationStatus" />
 
@@ -98,7 +102,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtValue" />
 
@@ -109,7 +113,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtKey" />
 
@@ -117,27 +121,27 @@
                         android:id="@+id/donorID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:text="DONOR ID"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:gravity="center_horizontal"
+                        android:text="A123123"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.501"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/barcode" />
 
                     <TextView
                         android:id="@+id/donationStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:text="Donation Status"
                         android:textColor="@android:color/holo_green_dark"
                         android:textSize="18sp"
@@ -152,7 +156,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/gender" />
 
@@ -163,7 +167,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/barangay" />
 
@@ -174,7 +178,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/city" />
 
@@ -185,7 +189,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/province" />
 
@@ -197,7 +201,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="Name"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/txtValue" />
 
@@ -209,7 +213,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="Date of Birth"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/txtKey" />
 
@@ -221,7 +225,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="Gender"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/gender" />
 
@@ -233,7 +237,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="No. / Street / Block"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/noStBlock" />
 
@@ -245,7 +249,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="City / Municipality"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/city" />
 
@@ -257,7 +261,7 @@
                         android:layout_marginRight="16dp"
                         android:paddingRight="16dp"
                         android:text="Province"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/province" />
 
@@ -265,12 +269,12 @@
                         android:id="@+id/textView19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
                         android:paddingRight="16dp"
                         android:text="Region"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/region" />
@@ -282,7 +286,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="16dp"
-                        android:textColor="@color/design_default_color_primary_dark"
+                        android:textColor="@android:color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/noStBlock" />
 
@@ -294,55 +298,31 @@
                         android:layout_marginRight="8dp"
                         android:paddingRight="16dp"
                         android:text="Barangay"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/barangay" />
+
+                    <ImageView
+                        android:id="@+id/barcode"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        card_view:srcCompat="@android:drawable/title_bar" />
 
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <android.support.design.button.MaterialButton
-                    android:id="@+id/btnDonate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:text="Donate"
-                    tools:layout_editor_absoluteX="147dp"
-                    tools:layout_editor_absoluteY="430dp" />
-
-                <android.support.design.button.MaterialButton
-                    android:id="@+id/btnUpdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:text="Update"
-                    app:backgroundTint="@color/design_default_color_primary_dark"
-                    tools:layout_editor_absoluteX="147dp"
-                    tools:layout_editor_absoluteY="430dp" />
-
-                <android.support.design.button.MaterialButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:text="BACK"
-                    app:backgroundTint="@color/design_default_color_primary_dark"
-                    tools:layout_editor_absoluteX="147dp"
-                    tools:layout_editor_absoluteY="430dp" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 
 </android.support.constraint.ConstraintLayout>

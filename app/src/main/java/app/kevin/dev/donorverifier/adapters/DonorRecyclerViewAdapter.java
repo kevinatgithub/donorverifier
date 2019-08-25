@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,23 +19,36 @@ import app.kevin.dev.donorverifier.R;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Donor;
 
-public class DonorAdapter extends ArrayAdapter<Donor> {
+public class DonorRecyclerViewAdapter extends RecyclerView.Adapter<DonorRecyclerViewAdapter.MyViewHolder> {
 
+    private ArrayList<Donor> donors;
     private Context context;
+    private DonorRecyclerViewClickListener listener;
 
-    public DonorAdapter(@NonNull Context context, ArrayList<Donor> donors) {
-        super(context, 0, donors);
+    public DonorRecyclerViewAdapter(Context context,ArrayList<Donor> donors,DonorRecyclerViewClickListener listener) {
+        this.donors = donors;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Donor donor = getItem(position);
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View container = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_donor, parent,false);
+        return new MyViewHolder(container);
+    }
 
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_donor, parent,false);
-        }
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+        final Donor donor = donors.get(i);
+        View convertView = myViewHolder.container;
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(donor);
+            }
+        });
 
         TextView fullName = convertView.findViewById(R.id.txtValue);
         TextView bdate = convertView.findViewById(R.id.txtKey);
@@ -75,11 +88,30 @@ public class DonorAdapter extends ArrayAdapter<Donor> {
         }
 
         if(donor.getDonor_photo() != null){
-            byte[] decodedString = Base64.decode(donor.getDonor_photo(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            thumbnail.setImageBitmap(decodedByte);
-        }
+            try{
+                byte[] decodedString = Base64.decode(donor.getDonor_photo(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                thumbnail.setImageBitmap(decodedByte);
+            }catch (Exception e){
 
-        return convertView;
+            }
+        }
     }
+
+    @Override
+    public int getItemCount() {
+        return donors.size();
+    }
+
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public View container;
+
+        public MyViewHolder(View container) {
+            super(container);
+            this.container = container;
+        }
+    }
+
 }

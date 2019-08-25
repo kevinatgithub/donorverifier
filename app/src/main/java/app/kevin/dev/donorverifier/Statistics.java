@@ -25,14 +25,16 @@ import io.realm.RealmResults;
 
 public class Statistics extends AppCompatActivity {
 
-    TextView unsynced;
+//    TextView unsynced;
     TextView donors;
+    TextView photos;
     TextView barangays;
     TextView cities;
     TextView provinces;
     TextView regions;
-    ProgressBar unsyncedLoading;
+//    ProgressBar unsyncedLoading;
     ProgressBar donorsLoading;
+    ProgressBar photosLoading;
     ProgressBar barangaysLoading;
     ProgressBar citiesLoading;
     ProgressBar provincesLoading;
@@ -48,14 +50,16 @@ public class Statistics extends AppCompatActivity {
 
         AppDrawerItemClickListener.prepareAppDrawer(this);
 
-        unsynced = findViewById(R.id.unsynced);
+//        unsynced = findViewById(R.id.unsynced);
         donors = findViewById(R.id.donors);
+        photos = findViewById(R.id.photos);
         barangays = findViewById(R.id.barangays);
         cities = findViewById(R.id.cities);
         provinces = findViewById(R.id.provinces);
         regions = findViewById(R.id.regions);
-        unsyncedLoading = findViewById(R.id.unsyncedLoading);
+//        unsyncedLoading = findViewById(R.id.unsyncedLoading);
         donorsLoading = findViewById(R.id.donorsLoading);
+        photosLoading = findViewById(R.id.photosLoading);
         barangaysLoading = findViewById(R.id.barangaysLoading);
         citiesLoading = findViewById(R.id.citiesLoading);
         provincesLoading = findViewById(R.id.provincesLoading);
@@ -67,42 +71,6 @@ public class Statistics extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 refreshCount();
-            }
-        });
-
-        findViewById(R.id.cvRegions).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),GeoList.class);
-                i.putExtra("type","region");
-                startActivity(i);
-            }
-        });
-
-        findViewById(R.id.cvProvinces).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),GeoList.class);
-                i.putExtra("type","province");
-                startActivity(i);
-            }
-        });
-
-        findViewById(R.id.cvCities).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),GeoList.class);
-                i.putExtra("type","city");
-                startActivity(i);
-            }
-        });
-
-        findViewById(R.id.cvBarangays).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),GeoList.class);
-                i.putExtra("type","barangay");
-                startActivity(i);
             }
         });
     }
@@ -156,25 +124,35 @@ public class Statistics extends AppCompatActivity {
             }
         };
 
+        final Cb photosCB = new Cb(){
+            @Override
+            public void execute(int cnt) {
+                state.setPhotos(cnt);
+                photos.setText(String.valueOf(cnt));
+                getCountAsync(barangaysLoading,Barangay.class,barangaysCB);
+            }
+        };
+
         final Cb donorsCB = new Cb(){
             @Override
             public void execute(int cnt) {
                 state.setDonors(cnt);
                 donors.setText(String.valueOf(cnt));
-                getCountAsync(barangaysLoading,Barangay.class,barangaysCB);
+                getCountAsync(photosLoading,Splash.class,photosCB);
             }
         };
 
-        Cb unsyncedCB = new Cb() {
-            @Override
-            public void execute(int cnt) {
-                state.setUnsynced(cnt);
-                unsynced.setText(String.valueOf(cnt));
-                getCountAsync(donorsLoading,Donor.class,donorsCB);
-            }
-        };
+//        Cb unsyncedCB = new Cb() {
+//            @Override
+//            public void execute(int cnt) {
+//                state.setUnsynced(cnt);
+//                unsynced.setText(String.valueOf(cnt));
+//                getCountAsync(donorsLoading,Donor.class,donorsCB);
+//            }
+//        };
 
-        getCountAsync(unsyncedLoading, LocalDonor.class, unsyncedCB);
+//        getCountAsync(unsyncedLoading, LocalDonor.class, unsyncedCB);
+        getCountAsync(donorsLoading, Donor.class, donorsCB);
 
     }
 
@@ -183,6 +161,14 @@ public class Statistics extends AppCompatActivity {
             cb.execute(Region.getRegions().size());
             return;
         }
+
+        // TODO: 25/08/2019 Replace Splash.class, it was only used temporary
+        if(cls == Splash.class){
+            RealmResults r = realm.where(Donor.class).isNotNull("donor_photo").findAll();
+            cb.execute(r.size());
+            return;
+        }
+
         pb.setVisibility(View.VISIBLE);
         RealmResults results = realm.where(cls).findAll();
         pb.setVisibility(View.INVISIBLE);
@@ -221,8 +207,9 @@ public class Statistics extends AppCompatActivity {
         if(str != null){
             StatisticsState statisticsState = UserFn.gson.fromJson(str,StatisticsState.class);
 
-            unsynced.setText(String.valueOf(statisticsState.getUnsynced()));
+//            unsynced.setText(String.valueOf(statisticsState.getUnsynced()));
             donors.setText(String.valueOf(statisticsState.getDonors()));
+            photos.setText(String.valueOf(statisticsState.getPhotos()));
             barangays.setText(String.valueOf(statisticsState.getBarangays()));
             cities.setText(String.valueOf(statisticsState.getCities()));
             provinces.setText(String.valueOf(statisticsState.getProvinces()));

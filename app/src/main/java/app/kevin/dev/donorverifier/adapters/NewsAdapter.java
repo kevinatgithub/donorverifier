@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,11 @@ public class NewsAdapter extends ArrayAdapter<News> {
             subTitle.setText(news.getContent());
         }
 
+        byte[] decodedString = Base64.decode(news.getThumbnail(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        thumbnail.setImageBitmap(decodedByte);
+
+
 //        URL url = null;
 //        try {
 //            url = new URL(news.getThumbnail());
@@ -71,8 +77,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
 //            e.printStackTrace();
 //        }
 
-        DownloadImageWithURLTask downloadImageWithURLTask = new DownloadImageWithURLTask(thumbnail);
-        downloadImageWithURLTask.execute(news.getThumbnail());
+//        DownloadImageWithURLTask downloadImageWithURLTask = new DownloadImageWithURLTask(thumbnail);
+//        downloadImageWithURLTask.execute(news.getThumbnail());
 
         return convertView;
     }

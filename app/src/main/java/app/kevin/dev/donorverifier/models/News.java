@@ -11,6 +11,7 @@ public class News extends RealmObject {
     private String author;
     private String thumbnail;
     private String created_dt;
+    private String link;
 
     public int getId() {
         return id;
@@ -34,5 +35,9 @@ public class News extends RealmObject {
 
     public String getCreated_dt() {
         return created_dt;
+    }
+
+    public String getLink() {
+        return link;
     }
 }

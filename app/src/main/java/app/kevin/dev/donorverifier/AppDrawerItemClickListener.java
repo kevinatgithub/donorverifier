@@ -39,11 +39,11 @@ public class AppDrawerItemClickListener implements NavigationView.OnNavigationIt
                 activity.startActivity(verifierIntent);
                 activity.finish();
                 break;
-            case R.id.upload:
-                Intent uploadIntent = new Intent(activity,Upload.class);
-                activity.startActivity(uploadIntent);
-                activity.finish();
-                break;
+//            case R.id.upload:
+//                Intent uploadIntent = new Intent(activity,Upload.class);
+//                activity.startActivity(uploadIntent);
+//                activity.finish();
+//                break;
             case R.id.download:
                 Intent downloadIntent = new Intent(activity,Download.class);
                 activity.startActivity(downloadIntent);
@@ -88,12 +88,16 @@ public class AppDrawerItemClickListener implements NavigationView.OnNavigationIt
         NavigationView navView = activity.findViewById(R.id.nav_view);
         View headerView = navView.getHeaderView(0);
 
-        TextView txt_drawer_user_fullname = headerView.findViewById(R.id.txt_drawer_user_fullname);
-        TextView txt_drawer_user_designation = headerView.findViewById(R.id.txt_drawer_user_designation);
         String str = Session.get(activity,"user",null);
-        User user = UserFn.gson.fromJson(str,User.class);
-        txt_drawer_user_fullname.setText(user.getUser_fname() + " " + user.getUser_mname() + " " + user.getUser_lname());
-        txt_drawer_user_designation.setText(user.getUser_id());
+
+        if(str != null){
+            TextView txt_drawer_user_fullname = headerView.findViewById(R.id.txt_drawer_user_fullname);
+            TextView txt_drawer_user_designation = headerView.findViewById(R.id.txt_drawer_user_designation);
+            User user = UserFn.gson.fromJson(str,User.class);
+            txt_drawer_user_fullname.setText(user.getUser_fname() + " " + user.getUser_mname() + " " + user.getUser_lname());
+            txt_drawer_user_designation.setText(user.getUser_id());
+        }
+
 
         navView.setNavigationItemSelectedListener(new AppDrawerItemClickListener(activity));
 

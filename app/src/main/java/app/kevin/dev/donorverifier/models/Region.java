@@ -19,6 +19,14 @@ public class Region {
         return regname;
     }
 
+    public void setRegcode(String regcode) {
+        this.regcode = regcode;
+    }
+
+    public void setRegname(String regname) {
+        this.regname = regname;
+    }
+
     public static ArrayList<Region> getRegions(){
         ArrayList<Region> regions = new ArrayList<>();
         regions.add(new Region("01","Region 1 Ilocos Region"));

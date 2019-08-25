@@ -1,9 +1,12 @@
 package app.kevin.dev.donorverifier;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +24,8 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
     private Realm realm;
 
     TextView donorID;
-    ImageView thumbnail;
+    ImageView photo;
+    ImageView barcode;
     TextView donationStatus;
     TextView fullName;
     TextView bdate;
@@ -48,7 +52,8 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         donor = realm.where(Donor.class).equalTo("seqno",seqno).findFirst();
 
         donorID = findViewById(R.id.donorID);
-        thumbnail = findViewById(R.id.thumbnail);
+        photo = findViewById(R.id.photo);
+        barcode = findViewById(R.id.barcode);
         donationStatus = findViewById(R.id.donationStatus);
         fullName = findViewById(R.id.txtValue);
         bdate = findViewById(R.id.txtKey);
@@ -59,22 +64,16 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         province = findViewById(R.id.province);
         region = findViewById(R.id.region);
 
-        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
-        findViewById(R.id.btnUpdate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),DonorForm.class);
-                intent1.putExtra("id",donor.getSeqno());
-                startActivity(intent1);
-                finish();
-            }
-        });
+//        findViewById(R.id.btnUpdate).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent1 = new Intent(getApplicationContext(),DonorForm.class);
+//                intent1.putExtra("id",donor.getSeqno());
+//                startActivity(intent1);
+//                finish();
+//            }
+//        });
 
         if(donor != null)
             populateFields();
@@ -83,21 +82,49 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
 
     private void populateFields() {
 
-        donorID.setText(donor.getDonor_id());
+        if(donor.getDonor_id() != null && !donor.getDonor_id().trim().isEmpty())
+            donorID.setText(donor.getDonor_id());
+        else
+            donorID.setText("Donor ID not available");
+
+
+        if(donor.getDonor_photo() != null){
+            try{
+                byte[] decodedString = Base64.decode(donor.getDonor_photo(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                photo.setImageBitmap(decodedByte);
+            }catch (Exception e){
+
+            }
+        }else{
+            photo.setVisibility(View.GONE);
+        }
+
+        if(donor.getBarcode() != null){
+            byte[] decodedString = Base64.decode(donor.getBarcode(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            barcode.setImageBitmap(decodedByte);
+            barcode.setBackgroundColor(getResources().getColor(android.R.color.white));
+        }else{
+            barcode.setImageDrawable(getResources().getDrawable(android.R.drawable.title_bar));
+        }
 
         donationStatus.setText("");
 
         if(donor.getDonation_stat() != null){
             if(donor.getDonation_stat().toUpperCase().equals("Y")){
                 donationStatus.setText("May Donate");
-                donationStatus.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                donationStatus.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             }else if(donor.getDonation_stat().toUpperCase().equals("N")){
                 donationStatus.setText("Can't Donate");
                 donationStatus.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             }else{
                 donationStatus.setText("May Donate");
-                donationStatus.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                donationStatus.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             }
+        }else{
+            donationStatus.setText("May Donate");
+            donationStatus.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
         fullName.setText(UserFn.convertToTitleCaseIteratingChars(donor.getFname() + " " + donor.getMname() + " " + donor.getLname()));
