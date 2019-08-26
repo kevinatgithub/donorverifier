@@ -34,6 +34,7 @@
         android:paddingRight="16dp"
         android:text="You are about to download Region Data, this process may take a while and requires an stable internet connection."
         android:textColor="@color/design_default_color_primary_dark"
+        app:fontFamily="sans-serif-condensed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout5" />

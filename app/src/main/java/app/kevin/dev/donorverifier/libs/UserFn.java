@@ -35,6 +35,7 @@ public class UserFn {
 //    public static String API_CHECK_UPDATE = "checkupdates/{rows}/{last}";
     public static String API_GET_UPDATE_COUNT = "getUpdateCount/{regcode}/{last}";
     public static String API_GET_UPDATE = "getUpdate/{regcode}/{last}";
+    public static String API_GET_UPDATE_CHUNK = "getUpdateChunk/{regcode}/{start}/{size}";
     public static String API_REGIONS = "regions";
     public static String API_PROVINCES = "provinces";
     public static String API_CITIES = "cities";
@@ -57,7 +58,10 @@ public class UserFn {
     }
 
     public static void log(String message){
-        Log.d("LOG MESSAGE",message);
+        if(message != null)
+            Log.d("LOG MESSAGE",message);
+        else
+            Log.e("ERROR_SHOWING_MESSAGE","no message provided");
     }
 
     public static void clearDB(Realm realm) {

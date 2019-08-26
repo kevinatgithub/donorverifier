@@ -46,52 +46,37 @@
                 android:id="@+id/donorCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="0 Donors"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/regionName" />
+                card_view:layout_constraintTop_toBottomOf="@+id/regionName"
+                tools:layout_editor_absoluteX="8dp" />
 
             <TextView
                 android:id="@+id/photoCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="0 Photos"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/donorCount" />
 
             <TextView
-                android:id="@+id/barangayCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:text="0 Barangays"
-                app:layout_constraintHorizontal_bias="0.486"
-                app:layout_constraintTop_toBottomOf="@+id/photoCount"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
                 android:id="@+id/lastUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Last checked N/A"
-                app:layout_constraintTop_toBottomOf="@+id/barangayCount"
+                app:layout_constraintTop_toBottomOf="@+id/photoCount"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent" />
+                card_view:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -127,30 +112,6 @@
                     android:tint="@color/colorAccent"
                     card_view:srcCompat="@drawable/ic_download" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/donorsHidden"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="0"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/barangaysHidden"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="0"
-                android:visibility="invisible"
-                app:layout_constraintStart_toEndOf="@+id/donorsHidden"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

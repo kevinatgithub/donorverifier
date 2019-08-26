@@ -20,7 +20,6 @@ public class UpdateCountResponse {
     public class DataResponse{
         private int count;
         private String regcode;
-        private int barangays;
         private int withPhoto;
 
         public int getCount() {
@@ -29,10 +28,6 @@ public class UpdateCountResponse {
 
         public String getRegcode() {
             return regcode;
-        }
-
-        public int getBarangays() {
-            return barangays;
         }
 
         public int getWithPhoto() {

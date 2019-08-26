@@ -1,5 +1,9 @@
 package app.kevin.dev.donorverifier.models;
 
+import java.util.ArrayList;
+
+import app.kevin.dev.donorverifier.models.api_response.Donation;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -15,11 +19,13 @@ public class Donor extends RealmObject {
     private String gender;
     private String bdate;
     private String home_no_st_blk;
-    private String home_brgy;
-    private String home_prov;
-    private String home_city;
-    private String home_region;
+    private String region;
+    private String province;
+    private String city;
+    private String barangay;
     private String donation_stat;
+
+    private RealmList<Donation> donations;
 
     public String getSeqno() {
         return seqno;
@@ -101,36 +107,36 @@ public class Donor extends RealmObject {
         this.home_no_st_blk = home_no_st_blk;
     }
 
-    public String getHome_brgy() {
-        return home_brgy;
+    public String getRegion() {
+        return region;
     }
 
-    public void setHome_brgy(String home_brgy) {
-        this.home_brgy = home_brgy;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
-    public String getHome_prov() {
-        return home_prov;
+    public String getProvince() {
+        return province;
     }
 
-    public void setHome_prov(String home_prov) {
-        this.home_prov = home_prov;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getHome_city() {
-        return home_city;
+    public String getCity() {
+        return city;
     }
 
-    public void setHome_city(String home_city) {
-        this.home_city = home_city;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getHome_region() {
-        return home_region;
+    public String getBarangay() {
+        return barangay;
     }
 
-    public void setHome_region(String home_region) {
-        this.home_region = home_region;
+    public void setBarangay(String barangay) {
+        this.barangay = barangay;
     }
 
     public String getDonation_stat() {
@@ -139,5 +145,13 @@ public class Donor extends RealmObject {
 
     public void setDonation_stat(String donation_stat) {
         this.donation_stat = donation_stat;
+    }
+
+    public RealmList<Donation> getDonations() {
+        return donations;
+    }
+
+    public void setDonations(RealmList<Donation> donations) {
+        this.donations = donations;
     }
 }

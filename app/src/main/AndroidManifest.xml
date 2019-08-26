@@ -36,12 +36,9 @@
         <activity android:name=".NewsPreview" />
         <activity android:name=".Statistics" />
         <activity android:name=".Download" />
-        <activity android:name=".Upload" />
         <activity android:name=".DonorVerifier" />
         <activity android:name=".DownloadRegion" />
         <activity android:name=".DonorPreview" />
-        <activity android:name=".DonorForm" />
-        <activity android:name=".GeoList"></activity>
     </application>
 
 </manifest>

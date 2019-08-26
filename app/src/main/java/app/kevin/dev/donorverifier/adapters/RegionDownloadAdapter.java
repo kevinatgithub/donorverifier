@@ -40,9 +40,6 @@ public class RegionDownloadAdapter extends ArrayAdapter<Region> {
         TextView regionName = convertView.findViewById(R.id.regionName);
         TextView donorCount = convertView.findViewById(R.id.donorCount);
         TextView photoCount = convertView.findViewById(R.id.photoCount);
-        TextView donorsHidden = convertView.findViewById(R.id.donorsHidden);
-        TextView barangayCount = convertView.findViewById(R.id.barangayCount);
-        TextView barangaysHidden = convertView.findViewById(R.id.barangaysHidden);
         TextView lastUpdate = convertView.findViewById(R.id.lastUpdate);
 
         ImageButton refresh = convertView.findViewById(R.id.refresh);
@@ -50,10 +47,7 @@ public class RegionDownloadAdapter extends ArrayAdapter<Region> {
 
         regionName.setText(region.getRegname());
         donorCount.setText("0 Donors");
-        donorsHidden.setText("0");
         photoCount.setText("0 Photos");
-        barangayCount.setText("0 Barangays");
-        barangaysHidden.setText("0");
         lastUpdate.setText("Last Update N/A");
 
         final View cv = convertView;

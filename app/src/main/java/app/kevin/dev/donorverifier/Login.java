@@ -58,7 +58,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        checkNetwork();
     }
 
     private void validateForm() {
@@ -74,15 +73,6 @@ public class Login extends AppCompatActivity {
         if(txtUsername.getText().toString().length() > 0 && txtPassword.getText().toString().length() > 0){
             attemptLogin(txtUsername.getText().toString(),txtPassword.getText().toString());
         }
-    }
-
-    private void checkNetwork(){
-        ConnectivityManager.checkConnection(this, new Callback() {
-            @Override
-            public void execute() {
-
-            }
-        });
     }
 
     private void attemptLogin(String username, String password) {
@@ -117,7 +107,6 @@ public class Login extends AppCompatActivity {
         Session.set(getApplicationContext(),"user", UserFn.gson.toJson(user));
         Intent intent = new Intent(this,News.class);
         startActivity(intent);
-        Toast.makeText(this, "Welcome " + user.getUser_fname() + " " + user.getUser_lname(), Toast.LENGTH_SHORT).show();
         finish();
     }
 

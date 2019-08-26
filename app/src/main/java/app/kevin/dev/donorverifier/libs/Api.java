@@ -132,7 +132,8 @@ public class Api {
         },errorListener(new ApiErrorCallback() {
             @Override
             public void uponError(VolleyError error) {
-                Log.e("error",error.getMessage());
+                if(error != null)
+                    Log.e("error",error.getMessage());
             }
         }, activity));
 

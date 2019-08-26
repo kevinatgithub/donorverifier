@@ -19,7 +19,7 @@ public class Splash extends AppCompatActivity {
     private void checkIfLoggedIn() {
         String str = Session.get(this,"user",null);
         if(str != null){
-            Intent intent = new Intent(getApplicationContext(),DonorVerifier.class);
+            Intent intent = new Intent(getApplicationContext(),Statistics.class);
             startActivity(intent);
         }else{
             Intent intent = new Intent(getApplicationContext(),Login.class);

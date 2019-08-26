@@ -3,8 +3,8 @@ package app.kevin.dev.donorverifier;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
@@ -12,10 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import app.kevin.dev.donorverifier.libs.UserFn;
-import app.kevin.dev.donorverifier.models.Barangay;
-import app.kevin.dev.donorverifier.models.City;
 import app.kevin.dev.donorverifier.models.Donor;
-import app.kevin.dev.donorverifier.models.Province;
 import io.realm.Realm;
 
 public class DonorPreview extends AppCompatActivity implements View.OnClickListener {
@@ -136,25 +133,10 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         }
         noStBlock.setText(donor.getHome_no_st_blk());
 
-        if(donor.getHome_brgy() != null){
-            Barangay bgy = realm.where(Barangay.class).equalTo("bgycode",donor.getHome_brgy()).findFirst();
-            if(bgy != null)
-                barangay.setText(bgy.getBgyname());
-        }
-
-        if(donor.getHome_city() != null){
-            City cty = realm.where(City.class).equalTo("citycode",donor.getHome_city()).findFirst();
-            if(cty != null)
-                city.setText(cty.getCityname());
-        }
-
-        if(donor.getHome_prov() != null){
-            Province prov = realm.where(Province.class).equalTo("provcode",donor.getHome_prov()).findFirst();
-            if(prov != null)
-                province.setText(prov.getProvname());
-        }
-
-        region.setText(donor.getHome_region());
+        barangay.setText(donor.getBarangay());
+        city.setText(donor.getCity());
+        province.setText(donor.getProvince());
+        region.setText(donor.getRegion());
 
     }
 
