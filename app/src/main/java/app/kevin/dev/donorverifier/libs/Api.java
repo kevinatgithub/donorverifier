@@ -1,6 +1,7 @@
 package app.kevin.dev.donorverifier.libs;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -16,10 +17,14 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import app.kevin.dev.donorverifier.models.ApiErrorCallback;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
 import app.kevin.dev.donorverifier.models.api_response.CallbackWithStringResponse;
+
+import static android.content.ContentValues.TAG;
 
 public class Api {
     private static Activity activity;
@@ -138,5 +143,28 @@ public class Api {
         }, activity));
 
         requestQueue.add(strReq);
+    }
+
+    public static JSONObject fetchModules(Context ctx,String url){
+        JSONObject response = null;
+
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(url,null,future,future);
+        requestQueue.add(request);
+
+
+        try {
+            response = future.get(3, TimeUnit.SECONDS); // Blocks for at most 10 seconds.
+        } catch (InterruptedException e) {
+            Log.d(TAG,"interrupted");
+        } catch (ExecutionException e) {
+            Log.d(TAG,"execution");
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
+//        Log.d(TAG,response.toString());
+
+        return response;
     }
 }

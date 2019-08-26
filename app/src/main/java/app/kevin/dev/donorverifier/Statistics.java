@@ -27,7 +27,7 @@ import io.realm.RealmResults;
 
 public class Statistics extends AppCompatActivity {
 
-    private static final int TOTAL_DONORS = 1000;
+    private static final int TOTAL_DONORS = 10000;
 
     TextView donors;
     TextView photos;

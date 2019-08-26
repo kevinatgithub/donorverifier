@@ -2,6 +2,7 @@ package app.kevin.dev.donorverifier;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import app.kevin.dev.donorverifier.libs.Api;
+import app.kevin.dev.donorverifier.libs.RegionDataDownloader;
 import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.ApiErrorCallback;
@@ -70,7 +72,8 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         photos = intent.getIntExtra("photos",0);
 
         regionName.setText(region.getRegname() + "\n" + String.valueOf(donors) + " Donors\n"+ String.valueOf(photos) + " Photos");
-        downloadProgress.setMax(donors);
+        int max = (int) Math.ceil(donors/PER_BATCH_COUNT);
+        downloadProgress.setMax(max);
         downloadProgress.setIndeterminate(false);
         downloadProgress.setProgress(0);
 
@@ -93,7 +96,8 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
     private void batchDownloadRound(int round){
         int max = (int) Math.ceil(donors/PER_BATCH_COUNT);
         int progress = round;
-        downloadProgress.setProgress(((int) (Math.ceil(progress/max) * 100)),true);
+//        int currentP = ((int) (Math.ceil(progress/max) * 100));
+        downloadProgress.setProgress(progress,true);
         if(progress <= max){
             commenceDonorDownload(progress, new Callback() {
                 @Override
@@ -117,6 +121,19 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
     }
 
     private void commenceDonorDownload(final int start, final Callback callback) {
+
+//        RegionDataDownloader downloader = new RegionDataDownloader(this, start, new RegionDataDownloader.Callback() {
+//            @Override
+//            public void execute(JSONObject responseData) {
+//                if(responseData != null){
+//                    UpdateResponse request = UserFn.gson.fromJson(responseData.toString(),UpdateResponse.class);
+//                    beginSaving(request.getData());
+//                }
+//                callback.execute(start);
+//            }
+//        });
+//
+//        downloader.execute(region.getRegcode());
 
         String url = UserFn.url(UserFn.API_GET_UPDATE_CHUNK);
         url = url.replace("{regcode}", UserFn.urlEncode(region.getRegcode()));

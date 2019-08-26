@@ -8,11 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import org.qap.ctimelineview.TimelineRow;
+import org.qap.ctimelineview.TimelineViewAdapter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Donor;
+import app.kevin.dev.donorverifier.models.api_response.Donation;
 import io.realm.Realm;
 
 public class DonorPreview extends AppCompatActivity implements View.OnClickListener {
@@ -32,6 +43,8 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
     TextView city;
     TextView province;
     TextView region;
+
+    ListView donationTimeLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +73,7 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         city = findViewById(R.id.city);
         province = findViewById(R.id.province);
         region = findViewById(R.id.region);
+        donationTimeLine = findViewById(R.id.donationTimeLine);
 
 
 //        findViewById(R.id.btnUpdate).setOnClickListener(new View.OnClickListener() {
@@ -138,6 +152,39 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         province.setText(donor.getProvince());
         region.setText(donor.getRegion());
 
+        try {
+            populateDonations();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateDonations() throws ParseException {
+        if(donor.getDonations().size() == 0){
+            return;
+        }
+        ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
+
+        int i = 0;
+        for(Donation donation: donor.getDonations()){
+            TimelineRow r = new TimelineRow(i);
+            Date date =new SimpleDateFormat("YYYY-mm-dd").parse(donation.getDonation_dt());
+            r.setDate(date);
+//            r.setTitle(donation.getFacility());
+            r.setTitle("Sample name of Blood Center");
+            r.setTitleColor(getResources().getColor(R.color.colorPrimary));
+            r.setBellowLineColor(getResources().getColor(R.color.colorPrimary));
+            Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.ic_info);
+            r.setImage(img);
+            i++;
+            timelineRowsList.add(r);
+        }
+
+        ArrayAdapter<TimelineRow> myAdapter = new TimelineViewAdapter(this, 0, timelineRowsList,
+                //if true, list will be sorted by date
+                false);
+
+        donationTimeLine.setAdapter(myAdapter);
     }
 
     @Override
