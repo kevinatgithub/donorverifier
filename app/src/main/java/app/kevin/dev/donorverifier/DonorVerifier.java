@@ -1,6 +1,7 @@
 package app.kevin.dev.donorverifier;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,10 @@ public class DonorVerifier extends AppCompatActivity {
     EditText txtFname;
     EditText txtLname;
     Realm realm;
+    ConstraintLayout clInfo;
+    TextView info;
+
+    ArrayList<Donor> donors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,8 @@ public class DonorVerifier extends AppCompatActivity {
         tilLname = findViewById(R.id.tilLname);
         txtFname = findViewById(R.id.txtFname);
         txtLname = findViewById(R.id.txtLname);
+        clInfo = findViewById(R.id.cv_info);
+        info = findViewById(R.id.info);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +76,8 @@ public class DonorVerifier extends AppCompatActivity {
                 performSearch();
             }
         });
+
+        switchScreenState();
     }
 
     private void gotoPreview(Donor donor) {
@@ -92,9 +102,11 @@ public class DonorVerifier extends AppCompatActivity {
 
         RealmResults<Donor> realmResults = query.findAll();
 
-        ArrayList<Donor> donors = new ArrayList<>();
+        donors = new ArrayList<>();
         donors.addAll(realmResults);
-//        DonorAdapter adapter = new DonorAdapter(this,donors);
+
+        switchScreenState();
+
         DonorRecyclerViewAdapter adapter = new DonorRecyclerViewAdapter(this, donors, new DonorRecyclerViewClickListener() {
             @Override
             public void onClick(Donor donor) {
@@ -102,5 +114,19 @@ public class DonorVerifier extends AppCompatActivity {
             }
         });
         resultList.setAdapter(adapter);
+    }
+
+    private void switchScreenState() {
+        if(donors.size() == 0){
+            clInfo.setVisibility(View.VISIBLE);
+            if(txtFname.getText().length() == 0 && txtLname.getText().length() == 0){
+                info.setText("Start by entering the first name or last name of the donor in the fields above.");
+            }else if(txtFname.getText().length() != 0 || txtLname.getText().length() != 0){
+                info.setText("Donor information was not found.");
+            }
+        }else{
+            clInfo.setVisibility(View.GONE);
+            resultList.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -376,7 +376,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:text="Regions"
+                            android:text="Pre-loaded Regions Names"
                             android:textColor="@color/design_default_color_primary_dark"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
