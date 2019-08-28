@@ -1,4 +1,4 @@
-package app.kevin.dev.donorverifier.models.api_response;
+package app.kevin.dev.donorverifier.models;
 
 import io.realm.RealmObject;
 

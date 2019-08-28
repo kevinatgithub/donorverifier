@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapter;
 import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapterCheckClickListener;
 import app.kevin.dev.donorverifier.adapters.RegionDownloadAdapterDownloadClickListener;
 import app.kevin.dev.donorverifier.libs.Api;
+import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.CallbackWithResponse;
 import app.kevin.dev.donorverifier.models.DownloadState;
@@ -55,23 +57,15 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
     }
 
     @Override
-    public void onClick(Region region, View convertView, boolean isCheckButton) {
-        final TextView donorCount = convertView.findViewById(R.id.donorCount);
-        final TextView photoCount = convertView.findViewById(R.id.photoCount);
-
-        TextView lastUpdate = convertView.findViewById(R.id.lastUpdate);
+    public void onClick(final Region region, View convertView, boolean isCheckButton) {
+        final TextView lastUpdate = convertView.findViewById(R.id.lastUpdate);
+        final Button refresh = convertView.findViewById(R.id.refresh);
+//        final TextView donorCount = convertView.findViewById(R.id.donorCount);
+//        final TextView photoCount = convertView.findViewById(R.id.photoCount);
 
         Toast.makeText(this, "Please wait, checking..", Toast.LENGTH_SHORT).show();
 
-        DownloadState state = UserFn.getDownloadState(this);
-        String last = "0";
-        if(state.getRegions().size() > 0){
-            for(DownloadState.RegionState r : state.getRegions()){
-                if(r.getRegion().equals(region.getRegcode())){
-                    last = r.getLast();
-                }
-            }
-        }
+        String last = Session.get(this,"last_update_id_"+region.getRegcode(),"0");
         String url = UserFn.url(UserFn.API_GET_UPDATE_COUNT);
         url = url.replace("{regcode}", UserFn.urlEncode(region.getRegcode()));
         url = url.replace("{last}",UserFn.urlEncode(last));
@@ -82,8 +76,8 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
                 UpdateCountResponse countResponse = UserFn.gson.fromJson(response.toString(),UpdateCountResponse.class);
                 if(countResponse.getStatus().equals("ok")){
                     UpdateCountResponse.DataResponse data = countResponse.getData();
-                    donorCount.setText(String.valueOf(data.getCount()) + " Donors");
-                    photoCount.setText(String.valueOf(data.getWithPhoto() + " Photos"));
+                    lastUpdate.setText(String.valueOf(data.getCount()) + " Donors");
+                    Session.set(Download.this,"last_remaining_"+region.getRegcode(),String.valueOf(data.getCount()));
                 }
             }
         });

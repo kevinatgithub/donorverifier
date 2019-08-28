@@ -2,9 +2,13 @@ package app.kevin.dev.donorverifier.libs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.google.gson.Gson;
@@ -14,7 +18,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import app.kevin.dev.donorverifier.Download;
 import app.kevin.dev.donorverifier.models.Callback;
@@ -35,7 +42,7 @@ public class UserFn {
 //    public static String API_CHECK_UPDATE = "checkupdates/{rows}/{last}";
     public static String API_GET_UPDATE_COUNT = "getUpdateCount/{regcode}/{last}";
     public static String API_GET_UPDATE = "getUpdate/{regcode}/{last}";
-    public static String API_GET_UPDATE_CHUNK = "getUpdateChunk/{regcode}/{start}/{size}";
+    public static String API_GET_UPDATE_CHUNK = "getUpdateChunk/{regcode}/{last}/{start}/{size}";
     public static String API_REGIONS = "regions";
     public static String API_PROVINCES = "provinces";
     public static String API_CITIES = "cities";
@@ -148,5 +155,41 @@ public class UserFn {
         }
 
         return converted.toString();
+    }
+
+    public static void attachDatePicker(final Activity activity, int id, final DateSelectedListner selectedListner){
+        final Calendar myCalendar = Calendar.getInstance();
+
+        EditText edittext= activity.findViewById(id);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                String myFormat = "MMMM dd, yyyy"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                selectedListner.onSet(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+
+        edittext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(activity, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    public interface DateSelectedListner{
+        void onSet(String date);
     }
 }

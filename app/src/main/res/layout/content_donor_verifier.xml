@@ -34,7 +34,8 @@
                     android:layout_height="?android:attr/actionBarSize"
                     app:navigationIcon="@drawable/ic_menu_w"
                     app:title="Donor Verifier"
-                    app:titleTextColor="#ffffff" />
+                    app:titleTextColor="#ffffff">
+                </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
 
             <LinearLayout

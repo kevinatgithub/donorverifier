@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -19,7 +20,10 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import app.kevin.dev.donorverifier.libs.Api;
 import app.kevin.dev.donorverifier.libs.RegionDataDownloader;
@@ -35,6 +39,7 @@ import app.kevin.dev.donorverifier.models.api_response.CallbackWithStringRespons
 import app.kevin.dev.donorverifier.models.api_response.UpdateResponse;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class DownloadRegion extends AppCompatActivity implements View.OnClickListener {
 
@@ -98,6 +103,7 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         int progress = round;
 //        int currentP = ((int) (Math.ceil(progress/max) * 100));
         downloadProgress.setProgress(progress,true);
+        downloadProgressText.setText("Downloading " + progress + "%");
         if(progress <= max){
             commenceDonorDownload(progress, new Callback() {
                 @Override
@@ -107,37 +113,22 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
             });
             return;
         }else{
-            if(!photosDone){
-                photosDone = true;
-                commencePhotoDownload(new app.kevin.dev.donorverifier.models.Callback() {
-                    @Override
-                    public void execute() {
-                    }
-                });
-            }
-            Toast.makeText(DownloadRegion.this, "Download complete", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DownloadRegion.this, "Download complete.", Toast.LENGTH_SHORT).show();
+            Date date = Calendar.getInstance().getTime();
+            String dateStr = new SimpleDateFormat("MMMM dd, yyyyy").format(date);
+            Session.set(this,"last_update_" + region.getRegcode(), dateStr);
+            Donor last = realm.where(Donor.class).sort("seqno", Sort.DESCENDING).findFirst();
+            Session.set(this,"last_update_id_" + region.getRegcode(),last.getSeqno());
         }
 
     }
 
     private void commenceDonorDownload(final int start, final Callback callback) {
-
-//        RegionDataDownloader downloader = new RegionDataDownloader(this, start, new RegionDataDownloader.Callback() {
-//            @Override
-//            public void execute(JSONObject responseData) {
-//                if(responseData != null){
-//                    UpdateResponse request = UserFn.gson.fromJson(responseData.toString(),UpdateResponse.class);
-//                    beginSaving(request.getData());
-//                }
-//                callback.execute(start);
-//            }
-//        });
-//
-//        downloader.execute(region.getRegcode());
-
+        String last = Session.get(this,"last_update_id_"+region.getRegcode(),"0");
         String url = UserFn.url(UserFn.API_GET_UPDATE_CHUNK);
         url = url.replace("{regcode}", UserFn.urlEncode(region.getRegcode()));
         String s = String.valueOf(start * (int) PER_BATCH_COUNT);
+        url = url.replace("{last}",UserFn.urlEncode(last));
         url = url.replace("{start}", UserFn.urlEncode(s));
         url = url.replace("{size}", UserFn.urlEncode(String.valueOf((int) PER_BATCH_COUNT)));
 
@@ -156,6 +147,9 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    if(donor.getDonor_photo() != null){
+                        Log.d("PHOTO",donor.getDonor_photo());
+                    }
                     realm.copyToRealmOrUpdate(donor);
                 }
             }, new Realm.Transaction.OnSuccess() {
@@ -165,25 +159,6 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
                 }
             });
         }
-    }
-
-    private void commencePhotoDownload(final app.kevin.dev.donorverifier.models.Callback callback) {
-        Toast.makeText(this, "Downloading photos", Toast.LENGTH_SHORT).show();
-        RealmResults<Donor> donors = realm.where(Donor.class).equalTo("donor_photo","photo").findAll();
-        for(final Donor donor:donors){
-            String url = UserFn.url(UserFn.API_DONOR_PHOTO);
-            url = url.replace("{seqno}",UserFn.urlEncode(donor.getSeqno()));
-            Api.getString(this, url, new CallbackWithStringResponse() {
-                @Override
-                public void execute(@Nullable String response) {
-                    realm.beginTransaction();
-                    donor.setDonor_photo(response);
-                    realm.commitTransaction();
-                    callback.execute();
-                }
-            });
-        }
-
     }
 
 

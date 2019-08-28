@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_main_1_1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/main_card_margin_vertical"
+    android:layout_marginEnd="@dimen/main_card_margin_horizontal"
+    android:layout_marginStart="@dimen/main_card_margin_horizontal"
+    android:layout_marginTop="@dimen/main_card_margin_vertical"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:background="?attr/selectableItemBackground"
+    android:foreground="?attr/selectableItemBackground"
+    card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
+    card_view:cardElevation="@dimen/card_recycler_elevation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/regionName"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_main_card_1"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginTop="@dimen/card_title_margin_top"
+            android:text="Region Name"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/lastUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/regionName"
+            android:layout_marginBottom="@dimen/card_subtitle_margin"
+            android:layout_marginEnd="@dimen/card_subtitle_margin"
+            android:layout_marginStart="@dimen/card_subtitle_margin"
+            android:layout_marginTop="@dimen/card_button_margin"
+            android:text="Last Update : August 28, 2019" />
+
+        <Button
+            android:id="@+id/refresh"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lastUpdate"
+            android:layout_marginStart="@dimen/card_button_margin"
+            android:layout_marginLeft="@dimen/card_button_margin"
+            android:layout_marginTop="@dimen/card_button_margin"
+            android:layout_marginEnd="@dimen/card_button_margin"
+            android:layout_marginRight="@dimen/card_button_margin"
+            android:layout_marginBottom="@dimen/card_button_margin"
+            android:text="CHECK UPDATE"
+            android:textColor="@color/colorAccent"
+            card_view:backgroundTint="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/openRegionDownload"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lastUpdate"
+            android:layout_marginTop="@dimen/card_button_margin"
+            android:layout_marginBottom="@dimen/card_button_margin"
+            android:layout_toEndOf="@id/refresh"
+            android:layout_toRightOf="@id/refresh"
+            android:text="DOWNLOAD"
+            android:textColor="@color/colorAccent"
+            card_view:backgroundTint="@android:color/background_light" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

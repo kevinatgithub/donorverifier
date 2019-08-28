@@ -1,8 +1,5 @@
 package app.kevin.dev.donorverifier.models;
 
-import java.util.ArrayList;
-
-import app.kevin.dev.donorverifier.models.api_response.Donation;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;

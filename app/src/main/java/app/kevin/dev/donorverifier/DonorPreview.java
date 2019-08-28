@@ -19,12 +19,14 @@ import org.qap.ctimelineview.TimelineViewAdapter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Donor;
-import app.kevin.dev.donorverifier.models.api_response.Donation;
+import app.kevin.dev.donorverifier.models.Donation;
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class DonorPreview extends AppCompatActivity implements View.OnClickListener {
 
@@ -116,8 +118,10 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             barcode.setImageBitmap(decodedByte);
             barcode.setBackgroundColor(getResources().getColor(android.R.color.white));
+            barcode.setVisibility(View.VISIBLE);
         }else{
             barcode.setImageDrawable(getResources().getDrawable(android.R.drawable.title_bar));
+            barcode.setVisibility(View.INVISIBLE);
         }
 
         donationStatus.setText("");
@@ -166,15 +170,18 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
 
         int i = 0;
-        for(Donation donation: donor.getDonations()){
+        RealmList<Donation> rdonations = donor.getDonations();
+        ArrayList<Donation> donations = new ArrayList<>();
+        donations.addAll(rdonations);
+        Collections.reverse(donations);
+        for(Donation donation: donations){
             TimelineRow r = new TimelineRow(i);
-            Date date =new SimpleDateFormat("YYYY-mm-dd").parse(donation.getDonation_dt());
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(donation.getDonation_dt());
             r.setDate(date);
-//            r.setTitle(donation.getFacility());
-            r.setTitle("Sample name of Blood Center");
+            r.setTitle(donation.getFacility());
             r.setTitleColor(getResources().getColor(R.color.colorPrimary));
             r.setBellowLineColor(getResources().getColor(R.color.colorPrimary));
-            Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.ic_info);
+            Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.ic_circle_black);
             r.setImage(img);
             i++;
             timelineRowsList.add(r);

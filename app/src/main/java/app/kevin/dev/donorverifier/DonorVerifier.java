@@ -1,22 +1,22 @@
 package app.kevin.dev.donorverifier;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import app.kevin.dev.donorverifier.adapters.DonorAdapter;
 import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewAdapter;
 import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewClickListener;
 import app.kevin.dev.donorverifier.libs.UserFn;
@@ -31,14 +31,12 @@ public class DonorVerifier extends AppCompatActivity {
 //    ListView resultList;
     RecyclerView resultList;
     RecyclerView.LayoutManager layoutManager;
-    Button btnSearch;
-    TextInputLayout tilFname;
-    TextInputLayout tilLname;
-    EditText txtFname;
-    EditText txtLname;
+    Button btnSearch, btnClear;
+    EditText txtFname, txtLname, txtBdate;
     Realm realm;
     ConstraintLayout clInfo;
     TextView info;
+    CardView cardView;
 
     ArrayList<Donor> donors = new ArrayList<>();
 
@@ -50,23 +48,23 @@ public class DonorVerifier extends AppCompatActivity {
         AppDrawerItemClickListener.prepareAppDrawer(this);
         realm = UserFn.getRealmInstance(this);
 
+        cardView = findViewById(R.id.card_view);
         resultList = findViewById(R.id.donorList);
         resultList.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         resultList.setLayoutManager(layoutManager);
 
-//        resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Donor donor = (Donor) resultList.getItemAtPosition(i);
-//                gotoPreview(donor);
-//            }
-//        });
         btnSearch = findViewById(R.id.btnSearch);
-        tilFname = findViewById(R.id.tilFname);
-        tilLname = findViewById(R.id.tilLname);
+        btnClear = findViewById(R.id.btnClear);
         txtFname = findViewById(R.id.txtFname);
         txtLname = findViewById(R.id.txtLname);
+        txtBdate = findViewById(R.id.txtDob);
+        UserFn.attachDatePicker(this, R.id.txtDob, new UserFn.DateSelectedListner() {
+            @Override
+            public void onSet(String date) {
+                txtBdate.setText(date);
+            }
+        });
         clInfo = findViewById(R.id.cv_info);
         info = findViewById(R.id.info);
 
@@ -74,6 +72,15 @@ public class DonorVerifier extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 performSearch();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtFname.setText("");
+                txtLname.setText("");
+                txtBdate.setText("");
             }
         });
 
@@ -89,6 +96,7 @@ public class DonorVerifier extends AppCompatActivity {
     private void performSearch() {
         String fname = txtFname.getText().toString();
         String lname = txtLname.getText().toString();
+        String bdate = txtBdate.getText().toString();
 
         RealmQuery query = realm.where(Donor.class);
 
@@ -98,6 +106,10 @@ public class DonorVerifier extends AppCompatActivity {
 
         if(lname.length()>0){
             query.contains("lname",lname, Case.INSENSITIVE);
+        }
+
+        if(bdate.length()>0){
+            query.contains("bdate",bdate, Case.SENSITIVE);
         }
 
         RealmResults<Donor> realmResults = query.findAll();
@@ -114,6 +126,7 @@ public class DonorVerifier extends AppCompatActivity {
             }
         });
         resultList.setAdapter(adapter);
+        cardView.setVisibility(View.GONE);
     }
 
     private void switchScreenState() {
@@ -128,5 +141,26 @@ public class DonorVerifier extends AppCompatActivity {
             clInfo.setVisibility(View.GONE);
             resultList.setVisibility(View.VISIBLE);
         }
+    }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.donor_verifier_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                if(cardView.getVisibility() == View.VISIBLE){
+                    cardView.setVisibility(View.INVISIBLE);
+                }else{
+                    cardView.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
