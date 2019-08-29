@@ -21,6 +21,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import app.kevin.dev.donorverifier.Download;
@@ -41,8 +42,12 @@ public class UserFn {
 //    public static String API_CHECK_UPDATE_COUNT = "checkupdates/count/{last}";
 //    public static String API_CHECK_UPDATE = "checkupdates/{rows}/{last}";
     public static String API_GET_UPDATE_COUNT = "getUpdateCount/{regcode}/{last}";
+    public static String API_GET_DEFERRED_COUNT = "getBlockCount/{last}";
     public static String API_GET_UPDATE = "getUpdate/{regcode}/{last}";
     public static String API_GET_UPDATE_CHUNK = "getUpdateChunk/{regcode}/{last}/{start}/{size}";
+    public static String API_GET_DEFERRED_CHUNK = "getBlockChunk/{last}/{start}/{size}";
+    public static String API_GET_TOTAL = "getTotal";
+    public static String API_GET_TOTAL_IN_REGION = "getTotal/{regcode}";
     public static String API_REGIONS = "regions";
     public static String API_PROVINCES = "provinces";
     public static String API_CITIES = "cities";
@@ -191,5 +196,10 @@ public class UserFn {
 
     public interface DateSelectedListner{
         void onSet(String date);
+    }
+
+    public static String getCurrentDateString(){
+        Date c = Calendar.getInstance().getTime();
+        return new SimpleDateFormat("YYYY-MM-dd").format(c);
     }
 }

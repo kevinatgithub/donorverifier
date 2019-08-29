@@ -27,17 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="5dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout5"
-        card_view:cardCornerRadius="@dimen/card_album_radius"
-        android:visibility="gone">
+        card_view:cardCornerRadius="@dimen/card_album_radius">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,9 +61,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:hint="Last Name"
-                android:inputType="text"
-                android:maxLines="1"
                 android:id="@+id/txtLname"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -76,19 +69,18 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:background="@drawable/back"
                 android:gravity="center_vertical"
+                android:hint="Last Name"
+                android:inputType="text"
+                android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtFname"
-                android:background="@drawable/back"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/txtFname" />
 
             <EditText
-                android:hint="Date of Birth"
-                android:inputType="text"
-                android:maxLines="1"
                 android:id="@+id/txtDob"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -97,18 +89,52 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:background="@drawable/back"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
                 android:gravity="center_vertical"
+                android:hint="Date of Birth"
+                android:inputType="text"
+                android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtLname"
-                android:background="@drawable/back"
-                android:clickable="true"
-                android:editable="false"
-                android:focusable="false"/>
+                app:layout_constraintTop_toBottomOf="@+id/txtLname" />
+
+            <Switch
+                android:id="@+id/switchIncludeAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Include May Donate Donors"
+                android:textColor="#fff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtDob" />
+
+            <Switch
+                android:id="@+id/switchPhotoOnly"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Donor with photo only"
+                android:textColor="#fff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switchIncludeAll" />
 
             <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -117,7 +143,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtDob">
+                app:layout_constraintTop_toBottomOf="@+id/switchPhotoOnly">
 
                 <Button
                     android:id="@+id/btnSearch"

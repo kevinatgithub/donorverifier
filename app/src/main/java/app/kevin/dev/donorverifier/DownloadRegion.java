@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.RejectedExecutionException;
 
 import app.kevin.dev.donorverifier.libs.Api;
 import app.kevin.dev.donorverifier.libs.RegionDataDownloader;
@@ -68,6 +69,7 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         regionName = findViewById(R.id.regionName);
         btnStartDownload = findViewById(R.id.btnStartDownload);
         downloadProgressText = findViewById(R.id.downloadProgressText);
+        downloadProgressText.setVisibility(View.GONE);
         downloadProgress = findViewById(R.id.downloadProgress);
 
         Intent intent = getIntent();
@@ -86,6 +88,9 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
             @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+                Date date = Calendar.getInstance().getTime();
+                String dateStr = new SimpleDateFormat("MMMM dd, yyyy").format(date);
+                Session.set(DownloadRegion.this,"last_update_" + region.getRegcode(), dateStr);
                 btnStartDownload.setEnabled(false);
                 downloadProgress.setVisibility(View.VISIBLE);
                 batchDownloadRound(0);
@@ -103,7 +108,7 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         int progress = round;
 //        int currentP = ((int) (Math.ceil(progress/max) * 100));
         downloadProgress.setProgress(progress,true);
-        downloadProgressText.setText("Downloading " + progress + "%");
+//        downloadProgressText.setText("Downloading " + progress + "%");
         if(progress <= max){
             commenceDonorDownload(progress, new Callback() {
                 @Override
@@ -114,9 +119,6 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
             return;
         }else{
             Toast.makeText(DownloadRegion.this, "Download complete.", Toast.LENGTH_SHORT).show();
-            Date date = Calendar.getInstance().getTime();
-            String dateStr = new SimpleDateFormat("MMMM dd, yyyyy").format(date);
-            Session.set(this,"last_update_" + region.getRegcode(), dateStr);
             Donor last = realm.where(Donor.class).sort("seqno", Sort.DESCENDING).findFirst();
             Session.set(this,"last_update_id_" + region.getRegcode(),last.getSeqno());
         }
@@ -124,13 +126,7 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
     }
 
     private void commenceDonorDownload(final int start, final Callback callback) {
-        String last = Session.get(this,"last_update_id_"+region.getRegcode(),"0");
-        String url = UserFn.url(UserFn.API_GET_UPDATE_CHUNK);
-        url = url.replace("{regcode}", UserFn.urlEncode(region.getRegcode()));
-        String s = String.valueOf(start * (int) PER_BATCH_COUNT);
-        url = url.replace("{last}",UserFn.urlEncode(last));
-        url = url.replace("{start}", UserFn.urlEncode(s));
-        url = url.replace("{size}", UserFn.urlEncode(String.valueOf((int) PER_BATCH_COUNT)));
+       String url = getDownloadUrl(start);
 
         Api.call(this, url, new CallbackWithResponse() {
             @Override
@@ -142,22 +138,47 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    private String getDownloadUrl(int start) {
+        if(region.getRegcode().equals("XX")){
+            String last = Session.get(this,"last_update_id_"+region.getRegcode(),"0");
+            String url = UserFn.url(UserFn.API_GET_DEFERRED_CHUNK);
+            String s = String.valueOf(start * (int) PER_BATCH_COUNT);
+            url = url.replace("{last}",UserFn.urlEncode(last));
+            url = url.replace("{start}", UserFn.urlEncode(s));
+            url = url.replace("{size}", UserFn.urlEncode(String.valueOf((int) PER_BATCH_COUNT)));
+            return url;
+        }else{
+            String last = Session.get(this,"last_update_id_"+region.getRegcode(),"0");
+            String url = UserFn.url(UserFn.API_GET_UPDATE_CHUNK);
+            url = url.replace("{regcode}", UserFn.urlEncode(region.getRegcode()));
+            String s = String.valueOf(start * (int) PER_BATCH_COUNT);
+            url = url.replace("{last}",UserFn.urlEncode(last));
+            url = url.replace("{start}", UserFn.urlEncode(s));
+            url = url.replace("{size}", UserFn.urlEncode(String.valueOf((int) PER_BATCH_COUNT)));
+            return url;
+        }
+    }
+
     private void beginSaving(ArrayList<Donor> data) {
         for(final Donor donor: data){
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if(donor.getDonor_photo() != null){
-                        Log.d("PHOTO",donor.getDonor_photo());
+            try{
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if(donor.getDonor_photo() != null){
+                            Log.d("PHOTO",donor.getDonor_photo());
+                        }
+                        realm.copyToRealmOrUpdate(donor);
                     }
-                    realm.copyToRealmOrUpdate(donor);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
 
-                }
-            });
+                    }
+                });
+            }catch (RejectedExecutionException e){
+                Log.e("Error saving",e.getMessage());
+            }
         }
     }
 

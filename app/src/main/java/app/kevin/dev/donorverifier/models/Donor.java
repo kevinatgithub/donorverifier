@@ -21,6 +21,15 @@ public class Donor extends RealmObject {
     private String city;
     private String barangay;
     private String donation_stat;
+    private String created_dt;
+
+    public String getCreated_dt() {
+        return created_dt;
+    }
+
+    public void setCreated_dt(String created_dt) {
+        this.created_dt = created_dt;
+    }
 
     private RealmList<Donation> donations;
 

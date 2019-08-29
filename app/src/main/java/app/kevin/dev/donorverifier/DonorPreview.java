@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -197,5 +199,28 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(donor.getDonation_stat().equals("N")){
+
+        }else{
+            getMenuInflater().inflate(R.menu.donor_preview_menu, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_share:
+                Intent intent = new Intent();
+                intent.setAction("net.nbbnets.donor_info");
+                intent.putExtra("donor",UserFn.gson.toJson(donor));
+                sendBroadcast(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

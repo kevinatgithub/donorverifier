@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class DonorVerifier extends AppCompatActivity {
     ConstraintLayout clInfo;
     TextView info;
     CardView cardView;
+    Switch includeMayDonate, withPhotoOnly;
 
     ArrayList<Donor> donors = new ArrayList<>();
 
@@ -59,6 +61,9 @@ public class DonorVerifier extends AppCompatActivity {
         txtFname = findViewById(R.id.txtFname);
         txtLname = findViewById(R.id.txtLname);
         txtBdate = findViewById(R.id.txtDob);
+        includeMayDonate = findViewById(R.id.switchIncludeAll);
+        withPhotoOnly = findViewById(R.id.switchPhotoOnly);
+
         UserFn.attachDatePicker(this, R.id.txtDob, new UserFn.DateSelectedListner() {
             @Override
             public void onSet(String date) {
@@ -110,6 +115,14 @@ public class DonorVerifier extends AppCompatActivity {
 
         if(bdate.length()>0){
             query.contains("bdate",bdate, Case.SENSITIVE);
+        }
+
+        if(!includeMayDonate.isChecked()){
+            query.equalTo("donation_stat","N",Case.INSENSITIVE);
+        }
+
+        if(withPhotoOnly.isChecked()){
+            query.isNotNull("donor_photo");
         }
 
         RealmResults<Donor> realmResults = query.findAll();
