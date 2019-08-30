@@ -7,6 +7,7 @@ public class User {
     private String user_mname;
     private String user_lname;
     private String facility_cd;
+    private String password;
 
     public User(String user_id, int ulevel, String user_fname, String user_mname, String user_lname, String facility_cd) {
         this.user_id = user_id;
@@ -39,5 +40,13 @@ public class User {
 
     public String getFacility_cd() {
         return facility_cd;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

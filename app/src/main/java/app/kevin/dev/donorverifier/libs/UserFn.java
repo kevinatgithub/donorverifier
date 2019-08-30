@@ -1,11 +1,13 @@
 package app.kevin.dev.donorverifier.libs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import app.kevin.dev.donorverifier.Download;
+import app.kevin.dev.donorverifier.R;
 import app.kevin.dev.donorverifier.models.Callback;
 import app.kevin.dev.donorverifier.models.DownloadState;
 import app.kevin.dev.donorverifier.models.Region;
@@ -108,16 +111,47 @@ public class UserFn {
     }
 
     public static void confirm(Context context, String title, String message, final Callback onYes){
-        new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//        new AlertDialog.Builder(context)
+//                .setTitle(title)
+//                .setMessage(message)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//
+//                    public void onClick(DialogInterface dialog, int whichButton) {
+//                        onYes.execute();
+//                    }})
+//                .setNegativeButton(android.R.string.no, null).show();
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        onYes.execute();
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final android.support.v7.app.AlertDialog DIALOG = new android.support.v7.app.AlertDialog.Builder(context).create();
+        DIALOG.setTitle(title);
+        DIALOG.setMessage(message);
+        View customView = inflater.inflate(android.R.layout.select_dialog_item,null);
+        DIALOG.setView(customView);
+        DIALOG.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                DIALOG.dismiss();
+                onYes.execute();
+            }
+        });
+
+        DIALOG.setButton(DialogInterface.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        DIALOG.setOnShowListener(new DialogInterface.OnShowListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                DIALOG.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(R.color.colorAccent);
+                DIALOG.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(R.color.colorPrimary);
+            }
+        });
+        DIALOG.show();
     }
 
     public static Realm getRealmInstance(Context context){

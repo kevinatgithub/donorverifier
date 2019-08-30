@@ -55,19 +55,10 @@ public class AppDrawerItemClickListener implements NavigationView.OnNavigationIt
                 activity.finish();
                 break;
             case R.id.logout:
-                confirmLogout();
+                logout();
                 break;
         }
         return false;
-    }
-
-    private void confirmLogout(){
-        UserFn.confirm(activity, "Confirm Logout", "Please don't logout if you are going to a Mobile Blood Donation, confirm logout?", new Callback() {
-            @Override
-            public void execute() {
-                logout();
-            }
-        });
     }
 
     private void logout() {

@@ -5,7 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -30,6 +33,8 @@ public class News extends AppCompatActivity {
     ListView lvNewsList;
     Realm realm;
     ArrayList<app.kevin.dev.donorverifier.models.News> newsList;
+    TextView lblLoading;
+    ProgressBar pbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +48,18 @@ public class News extends AppCompatActivity {
         pullToRefresh = findViewById(R.id.pullToRefresh);
         lvNewsList = findViewById(R.id.announcementsList);
 
+        lblLoading = findViewById(R.id.lblLoading);
+        pbLoading = findViewById(R.id.pbLoading);
+
         newsList = retriveFromDB();
         if(newsList.size() == 0){
+            lblLoading.setVisibility(View.VISIBLE);
+            pbLoading.setVisibility(View.VISIBLE);
             fetchNews(new CallbackWithResponse() {
                 @Override
                 public void execute(@Nullable JSONObject response) {
+                    lblLoading.setVisibility(View.INVISIBLE);
+                    pbLoading.setVisibility(View.INVISIBLE);
                     NewsResponse response1 = UserFn.gson.fromJson(response.toString(),NewsResponse.class);
                     saveToDB(response1.getData());
                     Collections.reverse(response1.getData());
@@ -84,6 +96,8 @@ public class News extends AppCompatActivity {
     }
 
     private ArrayList<app.kevin.dev.donorverifier.models.News> retriveFromDB(){
+
+
         RealmResults<app.kevin.dev.donorverifier.models.News> result = realm.where(app.kevin.dev.donorverifier.models.News.class).findAll();
         result.sort("id",Sort.DESCENDING);
         ArrayList<app.kevin.dev.donorverifier.models.News> list = new ArrayList<>();

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,26 +31,30 @@ import app.kevin.dev.donorverifier.models.api_response.LoginResponse;
 
 public class Login extends AppCompatActivity {
 
-    TextInputLayout tilUsername;
-    TextInputLayout tilPassword;
-    EditText txtUsername;
-    EditText txtPassword;
-    Button btnLogin;
+    EditText txtUsername,txtPassword, txtPassword2;
+    TextView txtInfo,txtInfo2,txtAccount;
+    Button btnLogin, btnLogin2, btnForget;
     ProgressBar pbLoading;
-    TextView lblLoading;
+    CardView form1, form2;
+    User rememberedAccount = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        tilUsername = findViewById(R.id.tilUsername);
-        tilPassword = findViewById(R.id.tilPassword);
+        form1 = findViewById(R.id.form);
+        form2 = findViewById(R.id.form2);
+        txtInfo = findViewById(R.id.txtInfo);
+        txtInfo2 = findViewById(R.id.txtInfo2);
+        txtAccount = findViewById(R.id.account);
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
+        txtPassword2 = findViewById(R.id.txtPassword2);
         btnLogin = findViewById(R.id.btnLogin);
+        btnLogin2 = findViewById(R.id.btnLogin2);
+        btnForget = findViewById(R.id.btnForget);
         pbLoading = findViewById(R.id.pbLoading);
-        lblLoading = findViewById(R.id.lblLoading);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,21 +62,77 @@ public class Login extends AppCompatActivity {
                 validateForm();
             }
         });
+        btnLogin2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateLoginAgain();
+            }
+        });
+        btnForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserFn.confirm(Login.this, "Remove account", "This will remove current account details, and signing-in will require internet connection.", new Callback() {
+                    @Override
+                    public void execute() {
+                        Session.delete(Login.this,"remembered_account");
+                        form1.setVisibility(View.VISIBLE);
+                        form2.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        });
+
+        switchDisplay();
 
     }
 
-    private void validateForm() {
-        tilUsername.setError(null);
-        tilPassword.setError(null);
+    private void switchDisplay() {
+        String remembered_account_str = Session.get(this,"remembered_account",null);
+        if(remembered_account_str != null){
+            User user = UserFn.gson.fromJson(remembered_account_str,User.class);
+            rememberedAccount = user;
+            txtAccount.setText(UserFn.convertToTitleCaseIteratingChars(user.getUser_fname() + " " + user.getUser_mname() + " " + user.getUser_lname()));
 
+            form1.setVisibility(View.GONE);
+            form2.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void validateLoginAgain() {
+        if(txtPassword2.getText().length() == 0){
+            txtInfo2.setText("Please enter password");
+            txtInfo2.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }else{
+            txtInfo2.setText("");
+            if(txtPassword2.getText().toString().equals(rememberedAccount.getPassword())){
+                Intent intent = new Intent(this,DonorVerifier.class);
+                startActivity(intent);
+                finish();
+            }else{
+                txtInfo2.setText("Login failed, please check your username/password.");
+                txtInfo2.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            }
+        }
+    }
+
+    private void validateForm() {
+        txtInfo.setText("");
+        txtInfo.setTextColor(getResources().getColor(android.R.color.black));
+
+        String error = "";
         if(txtUsername.getText().toString().length() == 0){
-            tilUsername.setError("Please provide a valid username");
+            error = "Please provide a valid username";
         }
         if(txtPassword.getText().toString().length() == 0){
-            tilPassword.setError("Please enter your password");
+            error = "Please enter your password";
         }
         if(txtUsername.getText().toString().length() > 0 && txtPassword.getText().toString().length() > 0){
+            txtInfo.setText("Please wait, logging in..");
+            txtInfo.setTextColor(getResources().getColor(android.R.color.holo_blue_light));
             attemptLogin(txtUsername.getText().toString(),txtPassword.getText().toString());
+        }else{
+            txtInfo.setText(error);
+            txtInfo.setTextColor(getResources().getColor(android.R.color.holo_red_light));
         }
     }
 
@@ -90,7 +151,8 @@ public class Login extends AppCompatActivity {
                 if (loginResponse.getStatus().equals("ok")) {
                     processLogin(loginResponse.getUser());
                 } else {
-                    tilPassword.setError("Login failed, please check your username/password.");
+                    txtInfo.setText("Login failed, please check your username/password.");
+                    txtInfo.setTextColor(getResources().getColor(android.R.color.holo_red_light));
                     txtUsername.setText("");
                     txtPassword.setText("");
                 }
@@ -104,8 +166,10 @@ public class Login extends AppCompatActivity {
     }
 
     private void processLogin(User user) {
+        user.setPassword(txtPassword.getText().toString());
         Session.set(getApplicationContext(),"user", UserFn.gson.toJson(user));
-        Intent intent = new Intent(this,News.class);
+        Session.set(getApplicationContext(),"remembered_account", UserFn.gson.toJson(user));
+        Intent intent = new Intent(this,DonorVerifier.class);
         startActivity(intent);
         finish();
     }
@@ -113,14 +177,13 @@ public class Login extends AppCompatActivity {
     private void toggleLoading(boolean state){
         if(state){
             pbLoading.setVisibility(View.VISIBLE);
-            lblLoading.setVisibility(View.VISIBLE);
             txtUsername.setEnabled(false);
             txtPassword.setEnabled(false);
             btnLogin.setEnabled(false);
 
         }else{
+            txtInfo.setText("");
             pbLoading.setVisibility(View.INVISIBLE);
-            lblLoading.setVisibility(View.INVISIBLE);
             txtUsername.setEnabled(true);
             txtPassword.setEnabled(true);
             btnLogin.setEnabled(true);

@@ -1,5 +1,6 @@
 package app.kevin.dev.donorverifier;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.qap.ctimelineview.TimelineRow;
 import org.qap.ctimelineview.TimelineViewAdapter;
@@ -216,9 +218,18 @@ public class DonorPreview extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()){
             case R.id.action_share:
                 Intent intent = new Intent();
-                intent.setAction("net.nbbnets.donor_info");
-                intent.putExtra("donor",UserFn.gson.toJson(donor));
-                sendBroadcast(intent);
+                intent.setAction("dev.kevin.app.samplenbbnetsreceiver.receive");
+                intent.putExtra("fname",donor.getFname());
+                intent.putExtra("mname",donor.getMname());
+                intent.putExtra("lname",donor.getLname());
+                intent.putExtra("gender",donor.getGender());
+                intent.putExtra("bdate",donor.getBdate());
+                intent.putExtra("photo",donor.getDonor_photo());
+                try{
+                    startActivity(intent);
+                }catch (ActivityNotFoundException e){
+                    Toast.makeText(this, "Donor ID App not found", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
