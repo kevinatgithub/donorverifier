@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import doh.nvbsp.nbbnets.donorverifier.adapters.RegionDownloadAdapter;
@@ -67,11 +68,18 @@ public class Download extends AppCompatActivity implements RegionDownloadAdapter
         String total_donors = Session.get(this,"total_donors",null);
         String now = UserFn.getCurrentDateString();
         String lastCheck = Session.get(this,"total_donors_last_check","2013-01-01");
-        Period diff = Period.between(LocalDate.parse(lastCheck).withDayOfMonth(1),LocalDate.parse(now).withDayOfMonth(1));
+        try{
+            Period diff = Period.between(LocalDate.parse(lastCheck).withDayOfMonth(1),LocalDate.parse(now).withDayOfMonth(1));
 
-        if(total_donors == null){
+            if(total_donors == null){
+                getTotalCount();
+            }else if(diff.getMonths() > 0){
+                getTotalCount();
+            }
+
+        }catch (NoClassDefFoundError e){
             getTotalCount();
-        }else if(diff.getMonths() > 0){
+        }catch (DateTimeParseException e){
             getTotalCount();
         }
     }

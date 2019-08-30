@@ -233,7 +233,7 @@ public class UserFn {
 
     public static String getCurrentDateString(){
         Date c = Calendar.getInstance().getTime();
-        return new SimpleDateFormat("yyyyy-MM-dd").format(c);
+        return new SimpleDateFormat("yyyy-MM-dd").format(c);
     }
 
     public static TapTarget buildTapTargetToolbar(final Activity activity, final int id,final int title, final int message){

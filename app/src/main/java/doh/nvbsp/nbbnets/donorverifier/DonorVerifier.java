@@ -2,6 +2,7 @@ package doh.nvbsp.nbbnets.donorverifier;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,11 @@ public class DonorVerifier extends AppCompatActivity {
         txtBdate = findViewById(R.id.txtDob);
         includeMayDonate = findViewById(R.id.switchIncludeAll);
         withPhotoOnly = findViewById(R.id.switchPhotoOnly);
+
+        if (Build.VERSION.SDK_INT <= 22){
+            includeMayDonate.setTextColor(getResources().getColor(android.R.color.black));
+            withPhotoOnly.setTextColor(getResources().getColor(android.R.color.black));
+        }
 
         UserFn.attachDatePicker(this, R.id.txtDob, new UserFn.DateSelectedListner() {
             @Override
@@ -187,7 +193,7 @@ public class DonorVerifier extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_search:
                 if(cardView.getVisibility() == View.VISIBLE){
-                    cardView.setVisibility(View.INVISIBLE);
+                    cardView.setVisibility(View.GONE);
                 }else{
                     cardView.setVisibility(View.VISIBLE);
                 }

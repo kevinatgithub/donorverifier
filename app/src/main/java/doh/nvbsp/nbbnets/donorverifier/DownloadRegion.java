@@ -98,7 +98,10 @@ public class DownloadRegion extends AppCompatActivity implements View.OnClickLis
         int max = (int) Math.ceil(donors/PER_BATCH_COUNT);
         int progress = round;
 //        int currentP = ((int) (Math.ceil(progress/max) * 100));
-        downloadProgress.setProgress(progress,true);
+        if (Build.VERSION.SDK_INT > 22)
+            downloadProgress.setProgress(progress,true);
+        else
+            downloadProgress.setProgress(progress);
 //        downloadProgressText.setText("Downloading " + progress + "%");
         if(progress <= max){
             commenceDonorDownload(progress, new Callback() {
