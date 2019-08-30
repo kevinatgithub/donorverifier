@@ -2,4 +2,8 @@
     <string name="app_name">DonorVerifier</string>
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_closed">Drawer Closed</string>
+    <string name="ttv_donor_verifier_1_title">Tap here to search donor</string>
+    <string name="ttv_donor_verifier_1_message">Make sure you have downloaded donor data in the Download Resource module</string>
+    <string name="ttv_donor_verifier_2_title">Application Drawer</string>
+    <string name="ttv_donor_verifier_2_message">Tap here to open application drawer</string>
 </resources>

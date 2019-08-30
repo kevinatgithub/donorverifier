@@ -2,12 +2,14 @@ package app.kevin.dev.donorverifier;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +18,18 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewAdapter;
 import app.kevin.dev.donorverifier.adapters.DonorRecyclerViewClickListener;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Donor;
+import app.kevin.dev.donorverifier.models.User;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -90,6 +98,16 @@ public class DonorVerifier extends AppCompatActivity {
         });
 
         switchScreenState();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                List<TapTarget> targets = new ArrayList<>();
+                targets.add(UserFn.buildTapTargetToolbar(DonorVerifier.this,R.id.action_search,R.string.ttv_donor_verifier_1_title,R.string.ttv_donor_verifier_1_message));
+                targets.add(UserFn.buildTapTargetNavigationIcon(DonorVerifier.this,R.string.ttv_donor_verifier_2_title,R.string.ttv_donor_verifier_2_message));
+                new TapTargetSequence(DonorVerifier.this).targets(targets).start();
+            }
+        },200);
     }
 
     private void gotoPreview(Donor donor) {

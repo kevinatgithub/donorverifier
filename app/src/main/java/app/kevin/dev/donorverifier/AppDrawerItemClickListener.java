@@ -12,6 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import app.kevin.dev.donorverifier.libs.Session;
 import app.kevin.dev.donorverifier.libs.UserFn;
 import app.kevin.dev.donorverifier.models.Callback;
@@ -75,6 +81,28 @@ public class AppDrawerItemClickListener implements NavigationView.OnNavigationIt
         DrawerLayout drawerLayout = activity.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(activity,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_closed);
         drawerLayout.addDrawerListener(toggle);
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View view, float v) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
+            }
+        });
 
         NavigationView navView = activity.findViewById(R.id.nav_view);
         View headerView = navView.getHeaderView(0);

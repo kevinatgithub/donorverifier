@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.qapqap:TimelineView:v1.6'
     implementation 'com.github.florent37:materialtextfield:1.0.7'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
 }

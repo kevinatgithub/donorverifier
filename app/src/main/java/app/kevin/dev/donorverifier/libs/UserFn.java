@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.android.volley.Request;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -24,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import app.kevin.dev.donorverifier.Download;
@@ -236,4 +242,22 @@ public class UserFn {
         Date c = Calendar.getInstance().getTime();
         return new SimpleDateFormat("YYYY-MM-dd").format(c);
     }
+
+    public static TapTarget buildTapTargetToolbar(final Activity activity, final int id,final int title, final int message){
+        Toolbar toolbar = activity.findViewById(R.id.app_bar);
+        TapTarget target = TapTarget.forToolbarMenuItem(toolbar,id,activity.getResources().getString(title),activity.getResources().getString(message));
+        return target;
+    }
+
+    public static TapTarget buildTapTargetNavigationIcon(final Activity activity, final int title, final int message){
+        Toolbar toolbar = activity.findViewById(R.id.app_bar);
+        TapTarget target = TapTarget.forToolbarNavigationIcon(toolbar,activity.getResources().getString(title),activity.getResources().getString(message));
+        return target;
+    }
+
+    public static TapTarget buildTapTarget(final Activity activity, final int id,final int title, final int message){
+        TapTarget target = TapTarget.forView(activity.findViewById(id),activity.getResources().getString(title),activity.getResources().getString(message));
+        return target;
+    }
+
 }
