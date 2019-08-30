@@ -1,0 +1,174 @@
+package doh.nvbsp.nbbnets.donorverifier.libs;
+
+import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import doh.nvbsp.nbbnets.donorverifier.models.ApiErrorCallback;
+import doh.nvbsp.nbbnets.donorverifier.models.CallbackWithResponse;
+import doh.nvbsp.nbbnets.donorverifier.models.api_response.CallbackWithStringResponse;
+
+import static android.content.ContentValues.TAG;
+
+public class Api {
+    private static Activity activity;
+    private static RequestQueue requestQueue;
+
+    private static void init(Activity _activity){
+        activity = _activity;
+
+        if(requestQueue == null){
+            requestQueue = Volley.newRequestQueue(activity);
+        }
+
+    }
+
+    public static void call(final Activity ACTIVITY,final String URL,@Nullable final CallbackWithResponse CALLBACK){
+        init(ACTIVITY);
+        int socketTimeout = 60000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (CALLBACK != null){
+                    CALLBACK.execute(response);
+                }
+            }
+        }, errorListener(null,ACTIVITY));
+        request.setRetryPolicy(policy);
+        requestQueue.add(request);
+    }
+
+    public static void call(final Activity ACTIVITY,final String URL,@Nullable final CallbackWithResponse CALLBACK, @Nullable final ApiErrorCallback ERROR_CALLBACK){
+        init(ACTIVITY);
+        requestQueue.add(
+                new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (CALLBACK != null){
+                            CALLBACK.execute(response);
+                        }
+                    }
+                }, errorListener(ERROR_CALLBACK, ACTIVITY))
+        );
+    }
+
+    public static void call(final Activity ACTIVITY,final String URL,final int METHOD,final JSONObject REQUEST_BODY,@Nullable final CallbackWithResponse CALLBACK, @Nullable final ApiErrorCallback ERROR_CALLBACK){
+        init(ACTIVITY);
+        requestQueue.add(
+                new JsonObjectRequest(METHOD, URL, REQUEST_BODY, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (CALLBACK != null){
+                            CALLBACK.execute(response);
+                        }
+                    }
+                }, errorListener(ERROR_CALLBACK, ACTIVITY))
+        );
+    }
+
+    public static void call(final Activity ACTIVITY,final String URL,final int METHOD,final JSONObject REQUEST_BODY,@Nullable final CallbackWithResponse CALLBACK){
+        init(ACTIVITY);
+        requestQueue.add(
+                new JsonObjectRequest(METHOD, URL, REQUEST_BODY, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (CALLBACK != null){
+                            CALLBACK.execute(response);
+                        }
+                    }
+                }, errorListener(null, ACTIVITY))
+        );
+    }
+
+    private static Response.ErrorListener errorListener(final ApiErrorCallback ERROR_CALLBACK, final Activity ACTIVITY){
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(ERROR_CALLBACK != null){
+                    ERROR_CALLBACK.uponError(error);
+                }else{
+                    UserFn.cantConnect(ACTIVITY);
+//                    Log.e("CANT_CONNECT",error.getMessage());
+                }
+            }
+        };
+    }
+
+    public static JSONObject callWait(String URL){
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
+        requestQueue.add(request);
+
+        try {
+            JSONObject response = future.get(); // this will block
+            return response;
+        } catch (InterruptedException e) {
+            Log.e("ERROR",e.getMessage());
+            // exception handling
+        } catch (ExecutionException e) {
+            Log.e("ERROR",e.getMessage());
+            // exception handling
+        }
+
+        return null;
+    }
+
+    public static void getString(Activity activity, String url, final CallbackWithStringResponse callback) {
+        StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.execute(response);
+            }
+        },errorListener(new ApiErrorCallback() {
+            @Override
+            public void uponError(VolleyError error) {
+                if(error != null)
+                    Log.e("error",error.getMessage());
+            }
+        }, activity));
+
+        requestQueue.add(strReq);
+    }
+
+    public static JSONObject fetchModules(Context ctx,String url){
+        JSONObject response = null;
+
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(url,null,future,future);
+        requestQueue.add(request);
+
+
+        try {
+            response = future.get(3, TimeUnit.SECONDS); // Blocks for at most 10 seconds.
+        } catch (InterruptedException e) {
+            Log.d(TAG,"interrupted");
+        } catch (ExecutionException e) {
+            Log.d(TAG,"execution");
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
+//        Log.d(TAG,response.toString());
+
+        return response;
+    }
+}

@@ -4,7 +4,7 @@ apply plugin: 'realm-android'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "app.kevin.dev.donorverifier"
+        applicationId "doh.nvbsp.nbbnets.donorverifier"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1

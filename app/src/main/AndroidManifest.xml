@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="app.kevin.dev.donorverifier">
+    package="doh.nvbsp.nbbnets.donorverifier">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -24,21 +24,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DonorVerifier">
-        <activity android:name=".Splash">
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login" android:screenOrientation="portrait" />
-        <activity android:name=".News" />
-        <activity android:name=".NewsPreview" />
-        <activity android:name=".Statistics" />
-        <activity android:name=".Download" />
-        <activity android:name=".DonorVerifier" />
-        <activity android:name=".DownloadRegion" />
-        <activity android:name=".DonorPreview" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Login" android:screenOrientation="portrait" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.News" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.NewsPreview" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Statistics" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Download" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DonorVerifier" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DownloadRegion" />
+        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DonorPreview" />
     </application>
 
 </manifest>
