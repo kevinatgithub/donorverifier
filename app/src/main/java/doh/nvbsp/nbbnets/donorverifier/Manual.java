@@ -18,7 +18,7 @@ public class Manual extends AppCompatActivity {
         PDFView pdfView= findViewById(R.id.pdfView);
         pdfView.fromAsset("verifier_manual.pdf")
 //                .pages(0, 2, 1, 3, 3, 3) // all pages are displayed by default
-                .pages(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) // all pages are displayed by default
+                .pages(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18) // all pages are displayed by default
                 .enableSwipe(true) // allows to block changing pages using swipe
                 .swipeHorizontal(false)
                 .enableDoubletap(true)
