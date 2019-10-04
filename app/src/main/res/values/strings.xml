@@ -6,4 +6,5 @@
     <string name="ttv_donor_verifier_1_message">Make sure you have downloaded donor data in the Download Resource module</string>
     <string name="ttv_donor_verifier_2_title">Application Drawer</string>
     <string name="ttv_donor_verifier_2_message">Tap here to open application drawer</string>
+    <string name="application_version">1</string>
 </resources>

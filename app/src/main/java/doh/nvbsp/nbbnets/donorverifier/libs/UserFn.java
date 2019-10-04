@@ -57,6 +57,7 @@ public class UserFn {
     public static String API_NEWS = "news";
     public static String API_UPLOAD = "upload";
     public static String API_UPLOAD_PHOTO = "uploadphoto";
+    public static String API_CHECK_UPDATE = "version";
 
     public static String urlEncode(String str){
         try {

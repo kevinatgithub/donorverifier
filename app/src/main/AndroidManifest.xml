@@ -3,19 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="doh.nvbsp.nbbnets.donorverifier">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,21 +11,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DonorVerifier">
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Splash">
+        <activity android:name=".CheckUpdates"></activity>
+        <activity android:name=".Manual" />
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Login" android:screenOrientation="portrait" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.News" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.NewsPreview" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Statistics" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.Download" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DonorVerifier" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DownloadRegion" />
-        <activity android:name="doh.nvbsp.nbbnets.donorverifier.DonorPreview" />
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait" />
+        <activity android:name=".News" />
+        <activity android:name=".NewsPreview" />
+        <activity android:name=".Statistics" />
+        <activity android:name=".Download" />
+        <activity android:name=".DonorVerifier" />
+        <activity android:name=".DownloadRegion" />
+        <activity android:name=".DonorPreview" />
     </application>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

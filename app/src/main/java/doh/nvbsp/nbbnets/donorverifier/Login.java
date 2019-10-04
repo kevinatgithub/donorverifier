@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity {
 
         form1 = findViewById(R.id.form);
         form2 = findViewById(R.id.form2);
-        txtInfo = findViewById(R.id.txtInfo);
+        txtInfo = findViewById(R.id.txtUpdatedInfo);
         txtInfo2 = findViewById(R.id.txtInfo2);
         txtAccount = findViewById(R.id.account);
         txtUsername = findViewById(R.id.txtUsername);
