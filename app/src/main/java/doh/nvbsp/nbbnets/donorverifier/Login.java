@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +30,7 @@ import doh.nvbsp.nbbnets.donorverifier.models.api_response.LoginResponse;
 public class Login extends AppCompatActivity {
 
     EditText txtUsername,txtPassword, txtPassword2;
-    TextView txtInfo,txtInfo2,txtAccount;
+    TextView txtInfo,txtInfo2,txtAccount, txtViewManual;
     Button btnLogin, btnLogin2, btnForget;
     ProgressBar pbLoading;
     CardView form1, form2;
@@ -41,7 +43,7 @@ public class Login extends AppCompatActivity {
 
         form1 = findViewById(R.id.form);
         form2 = findViewById(R.id.form2);
-        txtInfo = findViewById(R.id.txtInfo);
+        txtInfo = findViewById(R.id.txtUpdatedInfo);
         txtInfo2 = findViewById(R.id.txtInfo2);
         txtAccount = findViewById(R.id.account);
         txtUsername = findViewById(R.id.txtUsername);
@@ -51,6 +53,23 @@ public class Login extends AppCompatActivity {
         btnLogin2 = findViewById(R.id.btnLogin2);
         btnForget = findViewById(R.id.btnForget);
         pbLoading = findViewById(R.id.pbLoading);
+        // added by mj
+        txtViewManual = findViewById(R.id.txtViewManual);
+        // add underline to the text
+        String mystring = new String("User Manual");
+        SpannableString content = new SpannableString(mystring);
+        content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
+        txtViewManual.setText(content);
+        // clickListener
+        txtViewManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //callUserManual
+                callUserManual();
+            }
+        });
+
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,4 +205,11 @@ public class Login extends AppCompatActivity {
 
         }
     }
+
+    // added by MJ
+    private void callUserManual(){
+        Intent i = new Intent(this, ManualOnLogin.class);
+        startActivity(i);
+    }
+
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
+    android:padding="0dp">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_menu_w"
+            app:title="Check for Updates"
+            app:titleTextColor="#ffffff" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".CheckUpdates">
+
+
+        <TextView
+            android:id="@+id/txtUpdatedInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="If App is updated"
+            android:textColor="#03A9F4"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtOutdatedInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="If APP is outdated"
+            android:textColor="#E91E63"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtServerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:textColor="#00BCD4" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/cmdUpdateApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="update app"
+            tools:layout_editor_absoluteX="65dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

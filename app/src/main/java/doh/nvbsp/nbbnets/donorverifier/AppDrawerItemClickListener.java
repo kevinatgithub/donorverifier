@@ -53,6 +53,16 @@ public class AppDrawerItemClickListener implements NavigationView.OnNavigationIt
                 activity.startActivity(statisticsIntent);
                 activity.finish();
                 break;
+            case R.id.user_manual:
+                Intent userManualIntent = new Intent(activity,Manual.class);
+                activity.startActivity(userManualIntent);
+                activity.finish();
+                break;
+            case R.id.check_updates:
+                Intent checkUpdatesIntent = new Intent(activity,CheckUpdates.class);
+                activity.startActivity(checkUpdatesIntent);
+                activity.finish();
+                break;
             case R.id.logout:
                 logout();
                 break;
